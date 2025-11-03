@@ -2,7 +2,11 @@ import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
-function RecommendationRequestForm( { initialContents, submitAction, buttonLabel = "Create" } ) {
+function RecommendationRequestForm({
+  initialContents,
+  submitAction,
+  buttonLabel = "Create",
+}) {
   // Stryker disable all
   const {
     register,
