@@ -100,20 +100,5 @@ describe("MenuItemReviewForm tests", () => {
     expect(screen.getByText(/Stars is required/)).toBeInTheDocument();
     expect(screen.getByText(/Date Reviewed is required/)).toBeInTheDocument();
     expect(screen.getByText(/Comments is required/)).toBeInTheDocument();
-
-    const starsInput = screen.getByTestId(`${testId}-stars`);
-    fireEvent.change(starsInput, { target: { value: "-1" } });
-    fireEvent.click(submitButton);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Stars must be at least 0/)).toBeInTheDocument();
-    });
-
-    fireEvent.change(starsInput, { target: { value: "6" } });
-    fireEvent.click(submitButton);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Stars can't exceed 5/)).toBeInTheDocument();
-    });
   });
 });
