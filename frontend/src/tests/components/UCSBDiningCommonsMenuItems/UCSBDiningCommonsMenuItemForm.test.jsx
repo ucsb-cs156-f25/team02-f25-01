@@ -42,7 +42,9 @@ describe("UCSBDiningCommonsMenuItemForm tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
-          <UCSBDiningCommonsMenuItemForm initialContents={ucsbDiningCommonsMenuItemFixtures.oneItem} />
+          <UCSBDiningCommonsMenuItemForm
+            initialContents={ucsbDiningCommonsMenuItemFixtures.oneItem}
+          />
         </Router>
       </QueryClientProvider>,
     );
@@ -91,8 +93,12 @@ describe("UCSBDiningCommonsMenuItemForm tests", () => {
     expect(screen.getByText(/Name is required/)).toBeInTheDocument();
     expect(screen.getByText(/Station is required/)).toBeInTheDocument();
 
-    const diningCommonsCodeInput = screen.getByTestId(`${testId}-diningCommonsCode`);
-    fireEvent.change(diningCommonsCodeInput, { target: { value: "a".repeat(16) } });
+    const diningCommonsCodeInput = screen.getByTestId(
+      `${testId}-diningCommonsCode`,
+    );
+    fireEvent.change(diningCommonsCodeInput, {
+      target: { value: "a".repeat(16) },
+    });
     fireEvent.click(submitButton);
 
     await waitFor(() => {
