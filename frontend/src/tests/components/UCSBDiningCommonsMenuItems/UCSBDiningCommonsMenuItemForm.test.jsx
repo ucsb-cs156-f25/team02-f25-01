@@ -132,30 +132,27 @@ describe("UCSBDiningCommonsMenuItemForm tests", () => {
       expect(codeInput.closest("form")).toContainElement(codeError);
     });
   });
+  
+  test("shows exact 'Max length 15 characters' message for station field", async () => {
+  render(
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <UCSBDiningCommonsMenuItemForm />
+      </Router>
+    </QueryClientProvider>,
+  );
 
-    test("maxLength validation triggers correctly for diningCommonsCode field", async () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <UCSBDiningCommonsMenuItemForm />
-        </Router>
-      </QueryClientProvider>,
-    );
+  const stationInput = await screen.findByTestId(`${testId}-station`);
+  const submitButton = await screen.findByTestId(`${testId}-submit`);
 
-    const testId = "UCSBDiningCommonsMenuItemForm";
-    const diningCommonsCodeInput = await screen.findByTestId(
-      `${testId}-diningCommonsCode`,
-    );
-    const submitButton = await screen.findByTestId(`${testId}-submit`);
+  // Enter a 16-char value to trigger validation
+  fireEvent.change(stationInput, { target: { value: "a".repeat(16) } });
+  fireEvent.click(submitButton);
 
-    // Enter a value longer than 15 characters
-    fireEvent.change(diningCommonsCodeInput, { target: { value: "a".repeat(16) } });
-    fireEvent.click(submitButton);
-
-    await waitFor(() => {
-      const errorMsg = screen.getByText("Max length 15 characters");
-      expect(errorMsg).toBeInTheDocument();
-      expect(diningCommonsCodeInput.closest("form")).toContainElement(errorMsg);
-    });
+  await waitFor(() => {
+    const error = screen.getByText("Max length 15 characters");
+    expect(error).toBeInTheDocument();
+    expect(stationInput.closest("form")).toContainElement(error);
   });
+});
 });
