@@ -132,4 +132,30 @@ describe("UCSBDiningCommonsMenuItemForm tests", () => {
       expect(codeInput.closest("form")).toContainElement(codeError);
     });
   });
+
+    test("maxLength validation triggers correctly for diningCommonsCode field", async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <UCSBDiningCommonsMenuItemForm />
+        </Router>
+      </QueryClientProvider>,
+    );
+
+    const testId = "UCSBDiningCommonsMenuItemForm";
+    const diningCommonsCodeInput = await screen.findByTestId(
+      `${testId}-diningCommonsCode`,
+    );
+    const submitButton = await screen.findByTestId(`${testId}-submit`);
+
+    // Enter a value longer than 15 characters
+    fireEvent.change(diningCommonsCodeInput, { target: { value: "a".repeat(16) } });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      const errorMsg = screen.getByText("Max length 15 characters");
+      expect(errorMsg).toBeInTheDocument();
+      expect(diningCommonsCodeInput.closest("form")).toContainElement(errorMsg);
+    });
+  });
 });
