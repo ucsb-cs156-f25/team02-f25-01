@@ -31,7 +31,7 @@
                 { "column": { "name": "REQUESTER_EMAIL",         "type": "VARCHAR(255)" } },
                 { "column": { "name": "TEAM_ID",                  "type": "VARCHAR(255)" } },
                 { "column": { "name": "TABLE_OR_BREAKOUT_ROOM",   "type": "VARCHAR(255)" } },
-                { "column": { "name": "REQUEST_TIME",             "type": "TIMESTAMP WITH TIME ZONE"    } },
+                { "column": { "name": "REQUEST_TIME",             "type": "timestamp(6)"    } },
                 { "column": { "name": "EXPLANATION",              "type": "VARCHAR(255)" } },
                 { "column": { "name": "SOLVED",                   "type": "BOOLEAN"      } }
               ]
