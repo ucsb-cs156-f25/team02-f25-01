@@ -84,15 +84,12 @@ import org.springframework.web.bind.annotation.RestController;
 <span class="fc" id="L84">    return jobService.runAsJob(testJob);</span>
   }
 
-
   @Operation(summary = &quot;Get long job logs&quot;)
   @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
   @GetMapping(&quot;/logs/{id}&quot;)
   public String getJobLogs(@Parameter(name = &quot;id&quot;, description = &quot;Job ID&quot;) @PathVariable Long id) {
 
-<span class="fc" id="L93">    return jobService.getJobLogs(id);</span>
+<span class="fc" id="L92">    return jobService.getJobLogs(id);</span>
   }
-
-
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

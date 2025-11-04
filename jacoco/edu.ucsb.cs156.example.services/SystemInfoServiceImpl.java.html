@@ -8,16 +8,14 @@ import org.springframework.stereotype.Service;
 
 /**
  * This is a service for getting information about the system.
- * 
- * This class relies on property values. For hints on testing, see: &lt;a href=
+ *
+ * &lt;p&gt;This class relies on property values. For hints on testing, see: &lt;a href=
  * &quot;https://www.baeldung.com/spring-boot-testing-configurationproperties&quot;&gt;https://www.baeldung.com/spring-boot-testing-configurationproperties&lt;/a&gt;
- * 
  */
-
-<span class="fc" id="L17">@Slf4j</span>
+<span class="fc" id="L15">@Slf4j</span>
 @Service(&quot;systemInfo&quot;)
 @ConfigurationProperties
-<span class="fc" id="L20">public class SystemInfoServiceImpl extends SystemInfoService {</span>
+<span class="fc" id="L18">public class SystemInfoServiceImpl extends SystemInfoService {</span>
 
   @Value(&quot;${spring.h2.console.enabled:false}&quot;)
   private boolean springH2ConsoleEnabled;
@@ -38,28 +36,28 @@ import org.springframework.stereotype.Service;
   private String commitId;
 
   public static String githubUrl(String repo, String commit) {
-<span class="fc bfc" id="L41" title="All 4 branches covered.">    return commit != null &amp;&amp; repo != null ? repo + &quot;/commit/&quot; + commit : null;</span>
+<span class="fc bfc" id="L39" title="All 4 branches covered.">    return commit != null &amp;&amp; repo != null ? repo + &quot;/commit/&quot; + commit : null;</span>
   }
 
   /**
    * This method returns the system information.
-   * 
+   *
    * @see edu.ucsb.cs156.example.models.SystemInfo
    * @return the system information
    */
   public SystemInfo getSystemInfo() {
-<span class="fc" id="L51">    SystemInfo si = SystemInfo.builder()</span>
-<span class="fc" id="L52">        .springH2ConsoleEnabled(this.springH2ConsoleEnabled)</span>
-<span class="fc" id="L53">        .showSwaggerUILink(this.showSwaggerUILink)</span>
-<span class="fc" id="L54">        .oauthLogin(this.oauthLogin)</span>
-<span class="fc" id="L55">        .sourceRepo(this.sourceRepo)</span>
-<span class="fc" id="L56">        .commitMessage(this.commitMessage)</span>
-<span class="fc" id="L57">        .commitId(this.commitId)</span>
-<span class="fc" id="L58">        .githubUrl(githubUrl(this.sourceRepo, this.commitId))</span>
-<span class="fc" id="L59">        .build();</span>
-<span class="fc" id="L60">    log.info(&quot;getSystemInfo returns {}&quot;, si);</span>
-<span class="fc" id="L61">    return si;</span>
+    SystemInfo si =
+<span class="fc" id="L50">        SystemInfo.builder()</span>
+<span class="fc" id="L51">            .springH2ConsoleEnabled(this.springH2ConsoleEnabled)</span>
+<span class="fc" id="L52">            .showSwaggerUILink(this.showSwaggerUILink)</span>
+<span class="fc" id="L53">            .oauthLogin(this.oauthLogin)</span>
+<span class="fc" id="L54">            .sourceRepo(this.sourceRepo)</span>
+<span class="fc" id="L55">            .commitMessage(this.commitMessage)</span>
+<span class="fc" id="L56">            .commitId(this.commitId)</span>
+<span class="fc" id="L57">            .githubUrl(githubUrl(this.sourceRepo, this.commitId))</span>
+<span class="fc" id="L58">            .build();</span>
+<span class="fc" id="L59">    log.info(&quot;getSystemInfo returns {}&quot;, si);</span>
+<span class="fc" id="L60">    return si;</span>
   }
-
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
