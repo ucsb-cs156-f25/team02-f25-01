@@ -57,9 +57,9 @@ function ArticleForm({
               isInvalid={Boolean(errors.title)}
               {...register("title", {
                 required: "Title is required.",
-                maxlength: {
+                maxLength: {
                   value: 255,
-                  message: "Max length 255 characters.",
+                  message: "Title max length 255 characters.",
                 },
               })}
             />
@@ -79,9 +79,9 @@ function ArticleForm({
               isInvalid={Boolean(errors.url)}
               {...register("url", {
                 required: "URL is required.",
-                maxlength: {
+                maxLength: {
                   value: 255,
-                  message: "Max length 255 characters.",
+                  message: "URL max length 255 characters.",
                 },
               })}
             />
@@ -101,9 +101,9 @@ function ArticleForm({
               isInvalid={Boolean(errors.explanation)}
               {...register("explanation", {
                 required: "Explanation is required.",
-                maxlength: {
+                maxLength: {
                   value: 255,
-                  message: "Max length 255 characters.",
+                  message: "Explanation max length 255 characters.",
                 },
               })}
             />
@@ -125,7 +125,7 @@ function ArticleForm({
                 required: "Email is required.",
                 maxLength: {
                   value: 255,
-                  message: "Max length 255 characters.",
+                  message: "Email max length 255 characters.",
                 },
                 pattern: {
                   value: email_regex,
