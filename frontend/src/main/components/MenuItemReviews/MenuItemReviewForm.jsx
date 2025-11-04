@@ -95,11 +95,7 @@ function MenuItemReviewForm({
             max: {
               value: 5,
               message: "Stars can't exceed 5",
-            },
-            validate: {
-              integer: (value) =>
-                Number.isInteger(value) || "Stars must be an integer",
-            },
+            }
           })}
         />
         <Form.Control.Feedback type="invalid">
