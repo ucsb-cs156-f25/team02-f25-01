@@ -19,8 +19,8 @@ describe("RecommendationRequestForm tests", () => {
   const queryClient = new QueryClient();
 
   const expectedHeaders = [
-    "RequesterEmail",
-    "ProfessorEmail",
+    "Requester Email",
+    "Professor Email",
     "Explanation",
     "Date Requested (iso format)",
     "Date Needed (iso format)",
@@ -98,8 +98,8 @@ describe("RecommendationRequestForm tests", () => {
     const submitButton = screen.getByText(/Create/);
     fireEvent.click(submitButton);
 
-    await screen.findByText(/RequesterEmail is required/);
-    expect(screen.getByText(/ProfessorEmail is required/)).toBeInTheDocument();
+    await screen.findByText(/Requester Email is required/);
+    expect(screen.getByText(/Professor Email is required/)).toBeInTheDocument();
     expect(screen.getByText(/Explanation is required/)).toBeInTheDocument();
     expect(screen.getByText(/Date Requested is required/)).toBeInTheDocument();
     expect(screen.getByText(/Date Needed is required/)).toBeInTheDocument();
