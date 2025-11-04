@@ -32,6 +32,8 @@ describe("UCSBDiningCommonsMenuItemForm tests", () => {
 
     expect(await screen.findByText(/Create/)).toBeInTheDocument();
 
+    expect(screen.getByTestId(`${testId}-submit`)).toBeInTheDocument();
+
     expectedHeaders.forEach((headerText) => {
       const header = screen.getByText(headerText);
       expect(header).toBeInTheDocument();
@@ -103,6 +105,9 @@ describe("UCSBDiningCommonsMenuItemForm tests", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Max length 15 characters/)).toBeInTheDocument();
+      const codeError = screen.getByText("Max length 15 characters");
+      const codeInput = screen.getByTestId(`${testId}-diningCommonsCode`);
+      expect(codeInput.closest("form")).toContainElement(codeError);
     });
 
     const nameInput = screen.getByTestId(`${testId}-name`);
@@ -111,6 +116,9 @@ describe("UCSBDiningCommonsMenuItemForm tests", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Max length 30 characters/)).toBeInTheDocument();
+      const codeError = screen.getByText("Max length 30 characters");
+      const codeInput = screen.getByTestId(`${testId}-name`);
+      expect(codeInput.closest("form")).toContainElement(codeError);
     });
 
     const stationInput = screen.getByTestId(`${testId}-station`);
@@ -119,6 +127,9 @@ describe("UCSBDiningCommonsMenuItemForm tests", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Max length 15 characters/)).toBeInTheDocument();
+      const codeError = screen.getByText("Max length 15 characters");
+      const codeInput = screen.getByTestId(`${testId}-station`);
+      expect(codeInput.closest("form")).toContainElement(codeError);
     });
   });
 });
