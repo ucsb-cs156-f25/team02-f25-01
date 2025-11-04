@@ -105,7 +105,7 @@ describe("RecommendationRequestsCreatePage tests", () => {
     const dateNeededInput = screen.getByLabelText("Date Needed (iso format)");
     expect(dateNeededInput).toBeInTheDocument();
 
-    const doneInput = screen.getByLabelText("Done");
+    const doneInput = screen.getByLabelText("Done (True/False)");
     expect(doneInput).toBeInTheDocument();
 
     const createButton = screen.getByText("Create");

@@ -24,7 +24,7 @@ describe("RecommendationRequestForm tests", () => {
     "Explanation",
     "Date Requested (iso format)",
     "Date Needed (iso format)",
-    "Done",
+    "Done (True/False)",
   ];
   const testId = "RecommendationRequestForm";
 

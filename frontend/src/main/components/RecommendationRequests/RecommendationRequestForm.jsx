@@ -128,7 +128,7 @@ function RecommendationRequestForm({
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label htmlFor="done">Done</Form.Label>
+        <Form.Label htmlFor="done">Done (True/False)</Form.Label>
         <Form.Control
           id="done"
           type="text"
