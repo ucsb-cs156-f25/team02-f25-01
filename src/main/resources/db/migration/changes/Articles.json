@@ -60,7 +60,7 @@
                   {
                     "column": {
                       "name": "DATE_ADDED",
-                      "type": "TIMESTAMP WITH TIME ZONE"
+                      "type": "TIMESTAMP"
                     }
                   }
                 ],
