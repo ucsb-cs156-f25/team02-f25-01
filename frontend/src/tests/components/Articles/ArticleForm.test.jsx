@@ -63,10 +63,18 @@ describe("ArticleForm tests", () => {
     await screen.findByText(/URL max length 255 characters./);
     await screen.findByText(/Email max length 255 characters./);
     expect(screen.getByText(/Date Added is required./)).toBeInTheDocument();
-    expect(screen.getByText(/Explanation max length 255 characters./)).toBeInTheDocument();
-    expect(screen.getByText(/Title max length 255 characters./)).toBeInTheDocument();
-    expect(screen.getByText(/URL max length 255 characters./)).toBeInTheDocument();
-    expect(screen.getByText(/Email max length 255 characters./)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Explanation max length 255 characters./),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Title max length 255 characters./),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/URL max length 255 characters./),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Email max length 255 characters./),
+    ).toBeInTheDocument();
   });
   test("Correct Email Error message", async () => {
     render(
