@@ -36,7 +36,9 @@ function UCSBOrganizationsForm({
       )}
 
       <Form.Group className="mb-3">
-        <Form.Label htmlFor="orgTranslationShort">OrgTranslationShort</Form.Label>
+        <Form.Label htmlFor="orgTranslationShort">
+          OrgTranslationShort
+        </Form.Label>
         <Form.Control
           data-testid={testIdPrefix + "-orgTranslationShort"}
           id="orgTranslationShort"
