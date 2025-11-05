@@ -1,6 +1,5 @@
 package edu.ucsb.cs156.example.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ucsb.cs156.example.entities.HelpRequest;
 import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.HelpRequestRepository;
@@ -13,34 +12,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-/** REST controller for HelpRequest */
+/** REST controller for HelpRequest (index + create) */
 @Tag(name = "HelpRequest")
-@RequestMapping("/api/helprequest")
 @RestController
+@RequestMapping("/api/helprequest")
 @Slf4j
 public class HelpRequestController extends ApiController {
 
-  @Autowired HelpRequestRepository helprequestRepository;
+  @Autowired private HelpRequestRepository helpRequestRepository;
 
-  /** List all HelpRequests */
-  @Operation(summary = "List all helprequests")
+  @Operation(summary = "List all help requests")
   @PreAuthorize("hasRole('ROLE_USER')")
   @GetMapping("/all")
   public Iterable<HelpRequest> allHelpRequests() {
-    return helprequestRepository.findAll();
+    return helpRequestRepository.findAll();
   }
 
-  /** Create a new helprequest */
-  @Operation(summary = "Create a new helprequest")
+  @Operation(summary = "Create a new help request")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PostMapping("/post")
   public HelpRequest postHelpRequest(
@@ -49,17 +39,12 @@ public class HelpRequestController extends ApiController {
       @Parameter(name = "tableOrBreakoutRoom") @RequestParam String tableOrBreakoutRoom,
       @Parameter(name = "explanation") @RequestParam String explanation,
       @Parameter(name = "solved") @RequestParam boolean solved,
-      @Parameter(
-              name = "requestTime",
-              description = "date-time in ISO local format, e.g. 2022-01-03T00:00:00")
+      @Parameter(name = "requestTime", description = "ISO 8601 e.g. 2022-01-03T00:00:00")
           @RequestParam("requestTime")
           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-          LocalDateTime requestTime)
-      throws JsonProcessingException {
+          LocalDateTime requestTime) {
 
-    log.info("requestTime={}", requestTime);
-
-    HelpRequest helprequest =
+    HelpRequest hr =
         HelpRequest.builder()
             .requesterEmail(requesterEmail)
             .teamId(teamId)
@@ -69,52 +54,48 @@ public class HelpRequestController extends ApiController {
             .solved(solved)
             .build();
 
-    return helprequestRepository.save(helprequest);
+    return helpRequestRepository.save(hr);
   }
 
-  /** Get a single helprequest by id */
-  @Operation(summary = "Get a single helprequest")
+  @Operation(summary = "Get a single help request by id")
   @PreAuthorize("hasRole('ROLE_USER')")
   @GetMapping("")
   public HelpRequest getById(@Parameter(name = "id") @RequestParam Long id) {
-    return helprequestRepository
+    return helpRequestRepository
         .findById(id)
         .orElseThrow(() -> new EntityNotFoundException(HelpRequest.class, id));
   }
 
-  /** Update a single helprequest */
-  @Operation(summary = "Update a single helprequest")
+  @Operation(summary = "Update a single help request")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PutMapping("")
   public HelpRequest updateHelpRequest(
       @Parameter(name = "id") @RequestParam Long id, @RequestBody @Valid HelpRequest incoming) {
-    HelpRequest helprequest =
-        helprequestRepository
+    HelpRequest existing =
+        helpRequestRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException(HelpRequest.class, id));
 
-    helprequest.setRequesterEmail(incoming.getRequesterEmail());
-    helprequest.setTeamId(incoming.getTeamId());
-    helprequest.setTableOrBreakoutRoom(incoming.getTableOrBreakoutRoom());
-    helprequest.setRequestTime(incoming.getRequestTime());
-    helprequest.setExplanation(incoming.getExplanation());
-    helprequest.setSolved(incoming.getSolved());
+    existing.setRequesterEmail(incoming.getRequesterEmail());
+    existing.setTeamId(incoming.getTeamId());
+    existing.setTableOrBreakoutRoom(incoming.getTableOrBreakoutRoom());
+    existing.setRequestTime(incoming.getRequestTime());
+    existing.setExplanation(incoming.getExplanation());
+    existing.setSolved(incoming.getSolved());
 
-    helprequestRepository.save(helprequest);
-    return helprequest;
+    return helpRequestRepository.save(existing);
   }
 
-  /** Delete a HelpRequest */
   @Operation(summary = "Delete a HelpRequest")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @DeleteMapping("")
   public Object deleteHelpRequest(@Parameter(name = "id") @RequestParam Long id) {
-    HelpRequest helprequest =
-        helprequestRepository
+    HelpRequest existing =
+        helpRequestRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException(HelpRequest.class, id));
 
-    helprequestRepository.delete(helprequest);
+    helpRequestRepository.delete(existing);
     return genericMessage("HelpRequest with id %s deleted".formatted(id));
   }
 }

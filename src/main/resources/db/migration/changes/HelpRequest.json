@@ -3,7 +3,7 @@
     {
       "changeSet": {
         "id": "HelpRequest-1",
-        "author": "hjin133",
+        "author": "jjohnvu",
         "preConditions": [
           { "onFail": "MARK_RAN" },
           {
@@ -15,31 +15,26 @@
         "changes": [
           {
             "createTable": {
+              "tableName": "HELPREQUESTS",
               "columns": [
                 {
                   "column": {
-                    "autoIncrement": true,
-                    "constraints": {
-                      "primaryKey": true,
-                      "primaryKeyName": "HELPREQUEST_PK"
-                    },
                     "name": "ID",
-                    "type": "BIGINT"
+                    "type": "BIGINT",
+                    "autoIncrement": true,
+                  "constraints": {
+                    "primaryKey": true,
+                    "primaryKeyName": "HELPREQUEST_PK"
+                  }
                   }
                 },
-                { "column": { "name": "REQUESTER_EMAIL", "type": "VARCHAR(255)" } },
-                { "column": { "name": "TEAM_ID", "type": "VARCHAR(255)" } },
-                { "column": { "name": "TABLE_OR_BREAKOUT_ROOM", "type": "VARCHAR(255)" } },
-                {
-                  "column": {
-                    "name": "REQUEST_TIME",
-                    "type": "TIMESTAMP"
-                  }
-                },
-                { "column": { "name": "EXPLANATION", "type": "VARCHAR(255)" } },
-                { "column": { "name": "SOLVED", "type": "BOOLEAN" } }
-              ],
-              "tableName": "HELPREQUESTS"
+                { "column": { "name": "REQUESTER_EMAIL",         "type": "VARCHAR(255)" } },
+                { "column": { "name": "TEAM_ID",                  "type": "VARCHAR(255)" } },
+                { "column": { "name": "TABLE_OR_BREAKOUT_ROOM",   "type": "VARCHAR(255)" } },
+                { "column": { "name": "REQUEST_TIME",             "type": "timestamp(6)"    } },
+                { "column": { "name": "EXPLANATION",              "type": "VARCHAR(255)" } },
+                { "column": { "name": "SOLVED",                   "type": "BOOLEAN"      } }
+              ]
             }
           }
         ]
