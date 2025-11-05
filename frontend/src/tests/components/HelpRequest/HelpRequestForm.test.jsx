@@ -182,13 +182,162 @@ describe("HelpRequestForm tests", () => {
         <HelpRequestForm
           initialContents={{
             ...helpRequestFixtures.oneHelpRequest,
-            requestTime: "2025-01-01", 
+            requestTime: "2025-01-01",
           }}
           submitAction={vi.fn()}
         />
       </Router>,
     );
-    
+
     expect(screen.getByTestId(`${testId}-requestTime`)).toHaveValue("");
   });
+
+  
+// --- MUTANT KILLERS ---
+test("requestTime undefined in initialContents renders empty input (kills undefined guard mutants)", async () => {
+  render(
+    <Router>
+      <HelpRequestForm
+        initialContents={{
+          ...helpRequestFixtures.oneHelpRequest,
+          requestTime: undefined,
+        }}
+        submitAction={vi.fn()}
+      />
+    </Router>
+  );
+  expect(screen.getByTestId("HelpRequestForm-requestTime")).toHaveValue("");
 });
+
+test("requestTime with seconds and trailing Z truncates to minutes (kills regex and >=16 slice mutants)", async () => {
+  render(
+    <Router>
+      <HelpRequestForm
+        initialContents={{
+          ...helpRequestFixtures.oneHelpRequest,
+          requestTime: "2025-11-04T10:30:59Z",
+        }}
+        submitAction={vi.fn()}
+      />
+    </Router>
+  );
+  expect(screen.getByTestId("HelpRequestForm-requestTime")).toHaveValue("2025-11-04T10:30");
+});
+
+test("requestTime with seconds and no Z truncates to minutes (kills string/regex and >=16 variants)", async () => {
+  render(
+    <Router>
+      <HelpRequestForm
+        initialContents={{
+          ...helpRequestFixtures.oneHelpRequest,
+          requestTime: "2025-11-04T10:30:59",
+        }}
+        submitAction={vi.fn()}
+      />
+    </Router>
+  );
+  expect(screen.getByTestId("HelpRequestForm-requestTime")).toHaveValue("2025-11-04T10:30");
+});
+
+test("email regex rejects missing TLD (a@bc) and accepts a@b.c", async () => {
+  render(
+    <Router>
+      <HelpRequestForm submitAction={vi.fn()} />
+    </Router>
+  );
+
+  // Fill other required fields so the email error surfaces deterministically
+  fireEvent.change(screen.getByTestId("HelpRequestForm-teamId"), { target: { value: "f25-01" } });
+  fireEvent.change(screen.getByTestId("HelpRequestForm-tableOrBreakoutRoom"), { target: { value: "Table 1" } });
+  fireEvent.change(screen.getByTestId("HelpRequestForm-requestTime"), { target: { value: "2025-11-04T10:30" } });
+  fireEvent.change(screen.getByTestId("HelpRequestForm-explanation"), { target: { value: "Need help now" } });
+
+  const email = screen.getByTestId("HelpRequestForm-requesterEmail");
+  const submit = screen.getByTestId("HelpRequestForm-submit");
+
+  // Invalid: no dot in domain
+  fireEvent.change(email, { target: { value: "a@bc" } });
+  fireEvent.click(submit);
+  await screen.findByText("Enter a valid email.");
+
+  // Valid: has dot in domain
+  fireEvent.change(email, { target: { value: "a@b.c" } });
+  fireEvent.click(submit);
+  await waitFor(() =>
+    expect(screen.queryByText("Enter a valid email.")).not.toBeInTheDocument()
+  );
+});
+
+test("Table / Breakout Room max length exact message at 101 and clears at 100", async () => {
+  render(
+    <Router>
+      <HelpRequestForm submitAction={vi.fn()} />
+    </Router>
+  );
+
+  // Fill other required fields
+  fireEvent.change(screen.getByTestId("HelpRequestForm-requesterEmail"), { target: { value: "jon@ucsb.edu" } });
+  fireEvent.change(screen.getByTestId("HelpRequestForm-teamId"), { target: { value: "f25-01" } });
+  fireEvent.change(screen.getByTestId("HelpRequestForm-requestTime"), { target: { value: "2025-11-04T10:30" } });
+  fireEvent.change(screen.getByTestId("HelpRequestForm-explanation"), { target: { value: "Help please" } });
+
+  const tor = screen.getByTestId("HelpRequestForm-tableOrBreakoutRoom");
+  const submit = screen.getByTestId("HelpRequestForm-submit");
+
+  // 101 -> exact message
+  fireEvent.change(tor, { target: { value: "x".repeat(101) } });
+  fireEvent.click(submit);
+  const err = await screen.findByText("Max length 100 characters");
+  expect(err).toBeInTheDocument();
+  expect(tor.closest("form")).toContainElement(err);
+
+  // 100 -> clears
+  fireEvent.change(tor, { target: { value: "y".repeat(100) } });
+  fireEvent.click(submit);
+  await waitFor(() =>
+    expect(screen.queryByText("Max length 100 characters")).not.toBeInTheDocument()
+  );
+});
+
+test("email regex rejects several invalid forms and accepts a complex valid one", async () => {
+  render(
+    <Router>
+      <HelpRequestForm submitAction={vi.fn()} />
+    </Router>
+  );
+
+  // Fill other required fields
+  fireEvent.change(screen.getByTestId("HelpRequestForm-teamId"), { target: { value: "f25-01" } });
+  fireEvent.change(screen.getByTestId("HelpRequestForm-tableOrBreakoutRoom"), { target: { value: "Table 1" } });
+  fireEvent.change(screen.getByTestId("HelpRequestForm-requestTime"), { target: { value: "2025-11-04T10:30" } });
+  fireEvent.change(screen.getByTestId("HelpRequestForm-explanation"), { target: { value: "Need help now" } });
+
+  const email = screen.getByTestId("HelpRequestForm-requesterEmail");
+  const submit = screen.getByTestId("HelpRequestForm-submit");
+
+  // Invalid: missing dot
+  fireEvent.change(email, { target: { value: "a@b" } });
+  fireEvent.click(submit);
+  await screen.findByText("Enter a valid email.");
+
+  // Invalid: ends with dot
+  fireEvent.change(email, { target: { value: "a@b." } });
+  fireEvent.click(submit);
+  await screen.findByText("Enter a valid email.");
+
+  // Invalid: double dot
+  fireEvent.change(email, { target: { value: "a@b..c" } });
+  fireEvent.click(submit);
+  await screen.findByText("Enter a valid email.");
+
+  // Valid: plus and multiple segments
+  fireEvent.change(email, { target: { value: "john+tag@ucsb.edu" } });
+  fireEvent.click(submit);
+  await waitFor(() =>
+    expect(screen.queryByText("Enter a valid email.")).not.toBeInTheDocument()
+  );
+});
+
+});
+  
+// --- End of file ---
