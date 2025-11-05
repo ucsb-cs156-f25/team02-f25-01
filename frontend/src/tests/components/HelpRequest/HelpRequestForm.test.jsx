@@ -25,7 +25,6 @@ describe("HelpRequestForm tests", () => {
 
     expect(await screen.findByText(/Create/)).toBeInTheDocument();
 
-    // fields visible, id hidden in create
     expect(screen.queryByTestId(`${testId}-id`)).not.toBeInTheDocument();
     expect(screen.getByLabelText("Requester Email")).toBeInTheDocument();
     expect(screen.getByLabelText("Team ID")).toBeInTheDocument();
@@ -56,7 +55,6 @@ describe("HelpRequestForm tests", () => {
       helpRequestFixtures.oneHelpRequest.teamId,
     );
 
-    // requestTime shown without trailing Z and trimmed to minutes
     const shown = screen.getByTestId(`${testId}-requestTime`);
     const expected = helpRequestFixtures.oneHelpRequest.requestTime
       .replace(/Z$/, "")
@@ -115,7 +113,6 @@ describe("HelpRequestForm tests", () => {
       expect(screen.getByText(/Enter a valid email/)).toBeInTheDocument(),
     );
 
-    // Explanation too long
     fireEvent.change(screen.getByTestId(`${testId}-explanation`), {
       target: { value: "a".repeat(256) },
     });
@@ -161,5 +158,37 @@ describe("HelpRequestForm tests", () => {
     expect(payload.explanation).toBe("Help please");
     expect(payload.solved).toBe(true);
     expect(payload.requestTime).toBe("2025-11-04T10:30Z");
+  });
+
+  test("renders correctly with empty string requestTime", async () => {
+    render(
+      <Router>
+        <HelpRequestForm
+          initialContents={{
+            ...helpRequestFixtures.oneHelpRequest,
+            requestTime: "",
+          }}
+          submitAction={vi.fn()}
+        />
+      </Router>,
+    );
+
+    expect(screen.getByTestId(`${testId}-requestTime`)).toHaveValue("");
+  });
+
+  test("renders correctly with a short requestTime", async () => {
+    render(
+      <Router>
+        <HelpRequestForm
+          initialContents={{
+            ...helpRequestFixtures.oneHelpRequest,
+            requestTime: "2025-01-01", 
+          }}
+          submitAction={vi.fn()}
+        />
+      </Router>,
+    );
+    
+    expect(screen.getByTestId(`${testId}-requestTime`)).toHaveValue("");
   });
 });

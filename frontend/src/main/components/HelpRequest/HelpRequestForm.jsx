@@ -2,15 +2,6 @@ import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
-// ISO local datetime (no trailing Z). Same spirit as UCSBDateForm.
-// Stryker disable Regex
-const isodate_regex =
-  /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d(?::[0-5]\d(?:\.\d+)?)?)/i;
-// Stryker restore Regex
-
-// Normalize incoming requestTime so <input type="datetime-local"> can render it.
-// - strip trailing Z
-// - trim to minutes (YYYY-MM-DDTHH:mm) because datetime-local often hides seconds by default
 const toLocalDatetimeValue = (s) => {
   if (!s) return s;
   const noZ = s.replace(/Z$/, "");
@@ -42,9 +33,8 @@ function HelpRequestForm({
   const testIdPrefix = "HelpRequestForm";
 
   const onSubmit = (data) => {
-    // Ensure UTC suffix before sending to backend
-    const rt = data.requestTime || "";
-    const withZ = rt.endsWith("Z") ? rt : `${rt}Z`;
+    const rt = data.requestTime;
+    const withZ = `${rt}Z`;
     submitAction({ ...data, requestTime: withZ });
   };
 
@@ -90,8 +80,6 @@ function HelpRequestForm({
           isInvalid={Boolean(errors.teamId)}
           {...register("teamId", {
             required: "Team ID is required.",
-            // Optional stricter pattern (e.g. f25-01):
-            // pattern: { value: /^f\d{2}-\d{2}$/i, message: "Team ID must look like f25-01" }
           })}
         />
         <Form.Control.Feedback type="invalid">
@@ -126,12 +114,11 @@ function HelpRequestForm({
           type="datetime-local"
           isInvalid={Boolean(errors.requestTime)}
           {...register("requestTime", {
-            required: true,
-            pattern: isodate_regex,
+            required: "Request Time is required.",
           })}
         />
         <Form.Control.Feedback type="invalid">
-          {errors.requestTime && "Request Time is required."}
+          {errors.requestTime?.message}
         </Form.Control.Feedback>
       </Form.Group>
 
@@ -178,3 +165,4 @@ function HelpRequestForm({
 }
 
 export default HelpRequestForm;
+export { HelpRequestForm };
