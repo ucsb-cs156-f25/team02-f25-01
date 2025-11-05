@@ -78,7 +78,7 @@ function UCSBOrganizationsForm({
         <Form.Control
           data-testid={testIdPrefix + "-inactive"}
           id="inactive"
-          type="text"
+          type="boolean"
           isInvalid={Boolean(errors.inactive)}
           {...register("inactive", {
             required: "Inactive is required.",
