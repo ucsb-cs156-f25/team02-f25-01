@@ -11,7 +11,7 @@ export default {
   component: UCSBDiningCommonsMenuItemEditPage,
 };
 
-const Template = () => <RestaurantEditPage storybook={true} />;
+const Template = () => <UCSBDiningCommonsMenuItemEditPage storybook={true} />;
 
 export const Default = Template.bind({});
 Default.parameters = {
@@ -26,7 +26,7 @@ Default.parameters = {
         status: 200,
       });
     }),
-    http.get("/api/restaurants", () => {
+    http.get("/api/ucsbdiningcommonsmenuitems", () => {
       return HttpResponse.json(
         ucsbDiningCommonsMenuItemFixtures.threeItems[0],
         {
@@ -34,12 +34,16 @@ Default.parameters = {
         },
       );
     }),
-    http.put("/api/restaurants", () => {
-      return HttpResponse.json({}, { status: 200 });
-    }),
-    http.put("/api/restaurants", (req) => {
-      window.alert("PUT: " + req.url + " and body: " + req.body);
-      return HttpResponse.json({}, { status: 200 });
+    http.put("/api/ucsbdiningcommonsmenuitems", () => {
+      return HttpResponse.json(
+        {
+          id: 17,
+          diningCommonsCode: "de-la-guerra",
+          name: "Grass Fed Burger",
+          station: "Grill (Cafe)",
+        },
+        { status: 200 },
+      );
     }),
   ],
 };
