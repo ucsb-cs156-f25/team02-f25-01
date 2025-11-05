@@ -95,6 +95,7 @@ function MenuItemReviewForm({
         <Form.Control
           id="dateReviewed"
           type="datetime-local"
+          step="1"
           isInvalid={Boolean(errors.dateReviewed)}
           {...register("dateReviewed", {
             required: true,
