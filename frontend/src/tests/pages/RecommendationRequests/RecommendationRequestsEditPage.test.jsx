@@ -46,7 +46,9 @@ describe("RecommendationRequestsEditPage tests", () => {
       axiosMock
         .onGet("/api/systemInfo")
         .reply(200, systemInfoFixtures.showingNeither);
-      axiosMock.onGet("/api/recommendationrequests", { params: { id: 17 } }).timeout();
+      axiosMock
+        .onGet("/api/recommendationrequests", { params: { id: 17 } })
+        .timeout();
     });
 
     afterEach(() => {
@@ -68,7 +70,9 @@ describe("RecommendationRequestsEditPage tests", () => {
         </QueryClientProvider>,
       );
       await screen.findByText("Edit Recommendation Request");
-      expect(screen.queryByTestId("RecommendationRequest-explanation")).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId("RecommendationRequest-explanation"),
+      ).not.toBeInTheDocument();
       restoreConsole();
     });
   });
@@ -84,15 +88,17 @@ describe("RecommendationRequestsEditPage tests", () => {
       axiosMock
         .onGet("/api/systemInfo")
         .reply(200, systemInfoFixtures.showingNeither);
-      axiosMock.onGet("/api/recommendationrequests", { params: { id: 17 } }).reply(200, {
-        id: 17,
-        requesterEmail: "testRequester1@gmail.com",
-        professorEmail: "testProfessor1@gmail.com",
-        explanation: "This is a test explanation.",
-        dateRequested: "2025-10-30T00:00",
-        dateNeeded: "2025-10-31T00:00",
-        done: "false",
-      });
+      axiosMock
+        .onGet("/api/recommendationrequests", { params: { id: 17 } })
+        .reply(200, {
+          id: 17,
+          requesterEmail: "testRequester1@gmail.com",
+          professorEmail: "testProfessor1@gmail.com",
+          explanation: "This is a test explanation.",
+          dateRequested: "2025-10-30T00:00",
+          dateNeeded: "2025-10-31T00:00",
+          done: "false",
+        });
       axiosMock.onPut("/api/recommendationrequests").reply(200, {
         id: "17",
         requesterEmail: "testRequester1EDITED@gmail.com",
@@ -125,10 +131,14 @@ describe("RecommendationRequestsEditPage tests", () => {
       await screen.findByTestId("RecommendationRequestForm-id");
 
       const idField = screen.getByTestId("RecommendationRequestForm-id");
-      const requesterEmailField = screen.getByTestId("RecommendationRequestForm-requesterEmail");
+      const requesterEmailField = screen.getByTestId(
+        "RecommendationRequestForm-requesterEmail",
+      );
       const professorEmailField = screen.getByLabelText("Professor Email");
       const explanationField = screen.getByLabelText("Explanation");
-      const dateRequestedField = screen.getByLabelText("Date Requested (iso format)");
+      const dateRequestedField = screen.getByLabelText(
+        "Date Requested (iso format)",
+      );
       const dateNeededField = screen.getByLabelText("Date Needed (iso format)");
       const doneField = screen.getByLabelText("Done (True/False)");
 
@@ -180,7 +190,7 @@ describe("RecommendationRequestsEditPage tests", () => {
       fireEvent.change(doneField, {
         target: { value: "true" },
       });
-      
+
       fireEvent.click(submitButton);
 
       await waitFor(() => expect(mockToast).toBeCalled());
@@ -202,7 +212,7 @@ describe("RecommendationRequestsEditPage tests", () => {
           done: "true",
         }),
       ); // posted object
-      expect(mockNavigate).toBeCalledWith({ to: "/recommendationrequests" });      
+      expect(mockNavigate).toBeCalledWith({ to: "/recommendationrequests" });
     });
   });
 });
