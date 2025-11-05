@@ -5,7 +5,6 @@ import { menuItemReviewFixtures } from "fixtures/menuItemReviewFixtures";
 import { http, HttpResponse } from "msw";
 
 import MenuItemReviewsIndexPage from "main/pages/MenuItemReviews/MenuItemReviewsIndexPage";
-import { menuItemReviewFixtures } from "fixtures/menuItemReviewFixtures";
 
 export default {
   title: "pages/MenuItemReviews/MenuItemReviewsIndexPage",
