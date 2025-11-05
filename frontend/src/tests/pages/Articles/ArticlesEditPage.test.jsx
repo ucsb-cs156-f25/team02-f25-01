@@ -180,7 +180,7 @@ describe("ArticlesEditPage tests", () => {
       expect(dateAddedField).toHaveValue("2022-02-02T00:00");
       expect(submitButton).toBeInTheDocument();
 
-      fireEvent.change(titleField, { target: { value: "test" } });
+      fireEvent.change(titleField, { target: { value: "test2" } });
       fireEvent.change(urlField, { target: { value: "test2.com" } });
       fireEvent.change(explanationField, { target: { value: "test 2" } });
       fireEvent.change(emailField, { target: { value: "test2@test.com" } });
