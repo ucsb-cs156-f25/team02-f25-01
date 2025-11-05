@@ -31,6 +31,8 @@ describe("UCSBOrganizationsForm tests", () => {
     );
 
     expect(await screen.findByText(/Create/)).toBeInTheDocument();
+    expect(screen.getByText(/OrgCode/)).toBeInTheDocument();
+    expect(screen.getByTestId(`${testId}-orgCode`)).toBeInTheDocument();
     expect(await screen.findByTestId(`${testId}-orgTranslation`)).toBeInTheDocument();
     expect(screen.getByTestId(`${testId}-inactive`)).toBeInTheDocument();
     expect(screen.getByTestId(`${testId}-submit`)).toBeInTheDocument();
@@ -92,9 +94,10 @@ describe("UCSBOrganizationsForm tests", () => {
     const submitButton = screen.getByText(/Create/);
     fireEvent.click(submitButton);
 
-    await screen.findByText(/OrgTranslationShort is required/);
-    expect(screen.getByText(/OrgTranslation is required/)).toBeInTheDocument();
-    expect(screen.getByText(/Inactive is required/)).toBeInTheDocument();
+    expect(await screen.findByText(/OrgCode is required/)).toBeInTheDocument();
+    expect(await screen.findByText(/OrgTranslationShort is required/)).toBeInTheDocument();
+    expect(await screen.findByText(/OrgTranslation is required/)).toBeInTheDocument();
+    expect(await screen.findByText(/Inactive is required/)).toBeInTheDocument();
 
     const nameInput = screen.getByTestId(`${testId}-orgTranslationShort`);
     fireEvent.change(nameInput, { target: { value: "a".repeat(31) } });
