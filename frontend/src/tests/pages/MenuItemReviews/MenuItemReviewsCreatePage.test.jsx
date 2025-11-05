@@ -124,6 +124,6 @@ describe("MenuItemReviewsCreatePage tests", () => {
     expect(mockToast).toHaveBeenCalledWith(
       "New menu item review Created - id: 8 itemId: 200",
     );
-    expect(mockNavigate).toHaveBeenCalledWith({ to: "/menuitemreview" });
+    expect(mockNavigate).toHaveBeenCalledWith({ to: "/menuitemreviews" });
   });
 });
