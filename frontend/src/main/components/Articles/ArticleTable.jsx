@@ -58,8 +58,7 @@ export default function ArticleTable({ articles, currentUser }) {
   ];
 
   if (hasRole(currentUser, "ROLE_ADMIN")) {
-    columns.push(
-        ButtonColumn("Edit", "primary", editCallback, "ArticleTable"));
+    columns.push(ButtonColumn("Edit", "primary", editCallback, "ArticleTable"));
     columns.push(
       ButtonColumn("Delete", "danger", deleteCallback, "ArticleTable"),
     );
