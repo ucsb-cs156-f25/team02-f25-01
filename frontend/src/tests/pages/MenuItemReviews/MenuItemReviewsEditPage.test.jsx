@@ -187,59 +187,5 @@ describe("MenuItemReviewsEditPage tests", () => {
       ); // posted object
       expect(mockNavigate).toHaveBeenCalledWith({ to: "/menuitemreviews" });
     });
-
-    /*
-    test("Changes when you click Update", async () => {
-      render(
-        <QueryClientProvider client={queryClient}>
-          <MemoryRouter>
-            <MenuItemReviewsEditPage />
-          </MemoryRouter>
-        </QueryClientProvider>,
-      );
-
-      await screen.findByTestId("MenuItemReviewForm-id");
-
-      const idField = screen.getByTestId("MenuItemReviewForm-id");
-      const itemIdField = screen.getByTestId("MenuItemReviewForm-itemId");
-      const reviewerEmailField = screen.getByTestId("MenuItemReviewForm-reviewerEmail");
-      const starsField = screen.getByTestId("MenuItemReviewForm-stars");
-      const dateReviewedField = screen.getByTestId("MenuItemReviewForm-dateReviewed");
-      const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
-      const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
-
-      expect(idField).toBeInTheDocument();
-      expect(idField).toHaveValue("17");
-
-      expect(itemIdField).toBeInTheDocument();
-      expect(itemIdField).toHaveValue("27");
-
-      expect(reviewerEmailField).toBeInTheDocument();
-      expect(reviewerEmailField).toHaveValue("testuser1@ucsb.edu");
-
-      expect(starsField).toBeInTheDocument();
-      expect(starsField).toHaveValue("3");
-
-      expect(dateReviewedField).toBeInTheDocument();
-      expect(dateReviewedField).toHaveValue("2025-10-31T00:48:32");
-
-      expect(commentsField).toBeInTheDocument();
-      expect(commentsField).toHaveValue("love it");
-
-      expect(submitButton).toHaveTextContent("Update");
-
-      fireEvent.change(nameField, {
-        target: { value: "Freebirds World Burrito" },
-      });
-      fireEvent.change(descriptionField, { target: { value: "Big Burritos" } });
-
-      fireEvent.click(submitButton);
-
-      await waitFor(() => expect(mockToast).toBeCalled());
-      expect(mockToast).toBeCalledWith(
-        "Restaurant Updated - id: 17 name: Freebirds World Burrito",
-      );
-      expect(mockNavigate).toHaveBeenCalledWith({ to: "/menuitemreviews" });
-    });*/
   });
 });
