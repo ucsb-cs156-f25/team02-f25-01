@@ -65,8 +65,8 @@ function UCSBDiningCommonsMenuItemForm({
           {...register("name", {
             required: "Name is required.",
             maxLength: {
-              value: 30,
-              message: "Max length 30 characters",
+              value: 50,
+              message: "Max length 50 characters",
             },
           })}
         />
