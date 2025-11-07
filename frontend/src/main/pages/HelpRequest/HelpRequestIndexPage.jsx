@@ -1,9 +1,9 @@
 import React from "react";
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
-import HelpRequestTable from "main/components/HelpRequest/HelpRequestTable.jsx";
-import { useCurrentUser, hasRole } from "main/utils/useCurrentUser";
+import HelpRequestTable from "main/components/HelpRequest/HelpRequestTable";
 import { useBackend, fetchWithRefresh } from "main/utils/useBackend";
-import { Link } from "react-router-dom";
+import { useCurrentUser, hasRole } from "main/utils/useCurrentUser";
+import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 
 export default function HelpRequestIndexPage() {
@@ -14,8 +14,9 @@ export default function HelpRequestIndexPage() {
     data: helpRequests,
     error,
     status,
-    mutate: refresh
+    mutate: refresh,
   } = useBackend(
+    // Stryker disable next-line all : don't test caching
     ["/api/helprequest/all"],
     { method: "GET", url: "/api/helprequest/all" },
     []
@@ -26,39 +27,59 @@ export default function HelpRequestIndexPage() {
       await fetchWithRefresh({
         url: "/api/helprequest",
         method: "DELETE",
-        params: { id: row.id }
+        params: { id: row.id },
       });
       toast.success(`HelpRequest with id ${row.id} deleted`);
-      await refresh();
+      refresh(); // no await, no extra branch
     } catch {
       toast.error(`Error deleting HelpRequest with id ${row.id}`);
     }
   };
 
-  return (
-    <BasicLayout>
-      <div className="pt-2" data-testid="HelpRequestIndexPage">
-        <h1>Help Requests</h1>
+  const createButton = () => {
+    if (isAdmin) {
+      return (
+        <Button
+          variant="primary"
+          href="/helprequest/create"
+          style={{ float: "right" }}
+          data-testid="HelpRequestIndexPage-create-button"
+        >
+          Create HelpRequest
+        </Button>
+      );
+    }
+  };
 
-        {isAdmin && (
-          <div className="my-3">
-            <Link
-              to="/helprequest/create"
-              className="btn btn-primary"
-              data-testid="HelpRequestIndexPage-create-button"
-            >
-              Create HelpRequest
-            </Link>
-          </div>
-        )}
+  if (status === "loading") {
+    return (
+      <BasicLayout>
+        <div className="pt-2" data-testid="HelpRequestIndexPage">
+          <h1>Help Requests</h1>
+          <div>Loading...</div>
+        </div>
+      </BasicLayout>
+    );
+  }
 
-        {status === "loading" && <div>Loading...</div>}
-        {error && (
+  if (error) {
+    return (
+      <BasicLayout>
+        <div className="pt-2" data-testid="HelpRequestIndexPage">
+          <h1>Help Requests</h1>
           <div data-testid="HelpRequestIndexPage-error">
             Error loading help requests
           </div>
-        )}
+        </div>
+      </BasicLayout>
+    );
+  }
 
+  return (
+    <BasicLayout>
+      <div className="pt-2" data-testid="HelpRequestIndexPage">
+        {createButton()}
+        <h1>Help Requests</h1>
         <HelpRequestTable
           helpRequests={helpRequests}
           showButtons={isAdmin}

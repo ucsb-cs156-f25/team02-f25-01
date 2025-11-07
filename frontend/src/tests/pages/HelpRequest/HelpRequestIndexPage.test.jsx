@@ -39,12 +39,19 @@ vi.mock("main/utils/useBackend", async (importOriginal) => {
 });
 
 import HelpRequestIndexPage from "main/pages/HelpRequest/HelpRequestIndexPage.jsx";
+import * as useBackendModule from "main/utils/useBackend";
 
 describe("HelpRequestIndexPage tests", () => {
   const axiosMock = new AxiosMockAdapter(axios);
-  const queryClient = new QueryClient();
+  let queryClient;
+
+  const makeClient = () =>
+    new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    });
 
   beforeEach(() => {
+    queryClient = makeClient(); // fresh cache for each test
     mockToastSuccess.mockClear();
     mockToastError.mockClear();
     mockFetchWithRefresh.mockClear();
@@ -144,5 +151,67 @@ describe("HelpRequestIndexPage tests", () => {
       expect(screen.queryByText("alice@ucsb.edu")).not.toBeInTheDocument();
       expect(screen.getByText("bob@ucsb.edu")).toBeInTheDocument();
     });
+  });
+  test("renders error banner when backend list fetch fails", async () => {
+  setupCommon();
+  axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
+  axiosMock.onGet("/api/helprequest/all").reply(500);
+
+  renderPage();
+
+  // shows heading, then error state
+  expect(await screen.findByText("Help Requests")).toBeInTheDocument();
+  expect(await screen.findByTestId("HelpRequestIndexPage-error")).toBeInTheDocument();
+});
+
+  test("admin delete failure shows error toast and leaves rows intact", async () => {
+    setupCommon();
+    axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.adminUser);
+    axiosMock.onGet("/api/helprequest/all").replyOnce(200, sample);
+
+    // make the delete call fail
+    mockFetchWithRefresh.mockRejectedValueOnce(new Error("boom"));
+
+    renderPage();
+
+    // rows loaded (both present)
+    await screen.findByTestId("HelpRequestTable-cell-row-0-col-requesterEmail");
+    expect(screen.getAllByText(/@ucsb\.edu/)).toHaveLength(2);
+
+    const deleteBtn = await screen.findByTestId(
+      "HelpRequestTable-cell-row-0-col-Buttons-button-delete"
+    );
+    fireEvent.click(deleteBtn);
+
+    // catch branch: error toast fires, success does not
+    await waitFor(() => {
+      expect(mockToastError).toHaveBeenCalledWith(
+        expect.stringMatching(/^Error deleting HelpRequest with id \d+$/)
+      );
+    });
+    expect(mockToastSuccess).not.toHaveBeenCalled();
+
+    // list remains unchanged (no client-side removal)
+    expect(screen.getByText("alice@ucsb.edu")).toBeInTheDocument();
+    expect(screen.getByText("bob@ucsb.edu")).toBeInTheDocument();
+  });
+
+  test("shows loading state while fetching", async () => {
+    setupCommon();
+    axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
+    axiosMock.onGet("/api/helprequest/all").reply(200, []); // won't be used due to the spy
+
+    const useBackendSpy = vi.spyOn(useBackendModule, "useBackend").mockReturnValue({
+      data: [],
+      error: null,
+      status: "loading",
+      mutate: vi.fn(),
+    });
+
+    renderPage();
+
+    expect(screen.getByText("Loading...")).toBeInTheDocument();
+
+    useBackendSpy.mockRestore();
   });
 });
