@@ -64,7 +64,7 @@ public class UCSBOrganizationsIT {
     // act
     MvcResult response =
         mockMvc
-            .perform(get("/api/ucsbOrganizations?orgCode=ORG1"))
+            .perform(get("/api/ucsborganizations?orgCode=ORG1"))
             .andExpect(status().isOk())
             .andReturn();
 
@@ -91,7 +91,7 @@ public class UCSBOrganizationsIT {
     MvcResult response =
         mockMvc
             .perform(
-                post("/api/ucsbOrganizations/post?orgCode=ORG1&orgTranslation=Test Organization&orgTranslationShort=Test Org&inactive=false")
+                post("/api/ucsborganizations/post?orgCode=ORG1&orgTranslation=Test Organization&orgTranslationShort=Test Org&inactive=false")
                     .with(csrf()))
             .andExpect(status().isOk())
             .andReturn();
