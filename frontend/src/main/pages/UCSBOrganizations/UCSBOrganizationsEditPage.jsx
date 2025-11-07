@@ -53,7 +53,8 @@ export default function UCSBOrganizationsEditPage({ storybook = false }) {
   const { isSuccess } = mutation;
 
   const onSubmit = async (data) => {
-    mutation.mutate(data);
+    const datawithOrgCode = { ...data, orgCode: id };
+    mutation.mutate(datawithOrgCode);
   };
 
   if (isSuccess && !storybook) {
