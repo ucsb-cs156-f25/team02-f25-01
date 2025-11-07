@@ -24,24 +24,26 @@ public class UCSBOrganizationsWebIT extends WebTestCase {
 
     page.getByText("Create UCSB Organization").click();
     assertThat(page.getByText("Create New UCSB Organization")).isVisible();
-    page.getByTestId("UCSBOrganizationsForm-name").fill("Freebirds");
-    page.getByTestId("UCSBOrganizationsForm-description").fill("Build your own burrito chain");
+    page.getByTestId("UCSBOrganizationsForm-orgCode").fill("FB");
+    page.getByTestId("UCSBOrganizationsForm-orgTranslationShort").fill("Freebirds");
+    page.getByTestId("UCSBOrganizationsForm-orgTranslation").fill("Build your own burrito chain");
+    page.getByTestId("UCSBOrganizationsForm-inactive").fill("false");
     page.getByTestId("UCSBOrganizationsForm-submit").click();
 
-    assertThat(page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-description"))
+    assertThat(page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-orgTranslation"))
         .hasText("Build your own burrito chain");
 
     page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-Edit-button").click();
     assertThat(page.getByText("Edit UCSB Organization")).isVisible();
-    page.getByTestId("UCSBOrganizationsForm-description").fill("THE BEST");
+    page.getByTestId("UCSBOrganizationsForm-orgTranslation").fill("THE BEST");
     page.getByTestId("UCSBOrganizationsForm-submit").click();
 
-    assertThat(page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-description"))
+    assertThat(page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-orgTranslation"))
         .hasText("THE BEST");
 
     page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-Delete-button").click();
 
-    assertThat(page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-name")).not().isVisible();
+    assertThat(page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-orgCode")).not().isVisible();
   }
 
   @Test
@@ -51,6 +53,6 @@ public class UCSBOrganizationsWebIT extends WebTestCase {
     page.getByText("UCSB Organizations").click();
 
     assertThat(page.getByText("Create UCSB Organization")).not().isVisible();
-    assertThat(page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-name")).not().isVisible();
+    assertThat(page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-orgCode")).not().isVisible();
   }
 }
