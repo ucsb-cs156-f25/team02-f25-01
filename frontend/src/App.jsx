@@ -11,9 +11,9 @@ import RestaurantIndexPage from "main/pages/Restaurants/RestaurantIndexPage";
 import RestaurantCreatePage from "main/pages/Restaurants/RestaurantCreatePage";
 import RestaurantEditPage from "main/pages/Restaurants/RestaurantEditPage";
 
-import HelpRequestIndexPage from "main/pages/HelpRequests/HelpRequestIndexPage";
-import HelpRequestCreatePage from "main/pages/HelpRequests/HelpRequestCreatePage";
-import HelpRequestEditPage from "main/pages/HelpRequests/HelpRequestEditPage";
+import HelpRequestIndexPage from "main/pages/HelpRequests/HelpRequestsIndexPage";
+import HelpRequestCreatePage from "main/pages/HelpRequests/HelpRequestsCreatePage";
+import HelpRequestEditPage from "main/pages/HelpRequests/HelpRequestsEditPage";
 
 import MenuItemReviewsIndexPage from "main/pages/MenuItemReviews/MenuItemReviewsIndexPage";
 import MenuItemReviewsCreatePage from "main/pages/MenuItemReviews/MenuItemReviewsCreatePage";
