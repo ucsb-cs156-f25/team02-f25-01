@@ -196,6 +196,58 @@ describe("HelpRequestIndexPage tests", () => {
     expect(screen.getByText("bob@ucsb.edu")).toBeInTheDocument();
   });
 
+  test("uses GET /api/helprequest/all in useBackend", async () => {
+    // arrange
+    setupCommon();
+    axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
+    axiosMock.onGet("/api/helprequest/all").reply(200, []);
+
+    // capture args while delegating to the real hook (don’t break hooks)
+    const realUseBackend = useBackendModule.useBackend;
+    let capturedAxiosParams;
+    const spy = vi
+      .spyOn(useBackendModule, "useBackend")
+      .mockImplementation((qk, axiosParams, initialData) => {
+        capturedAxiosParams = axiosParams;
+        return realUseBackend(qk, axiosParams, initialData);
+      });
+
+    render(
+      <QueryClientProvider client={makeClient()}>
+        <MemoryRouter>
+          <HelpRequestIndexPage />
+        </MemoryRouter>
+      </QueryClientProvider>
+    );
+
+    await screen.findByText("Help Requests");
+
+    expect(capturedAxiosParams).toMatchObject({
+      method: "GET",
+      url: "/api/helprequest/all",
+    });
+
+    spy.mockRestore();
+  });
+
+  test("admin Create button has inline float:right", async () => {
+    setupCommon();
+    axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.adminUser);
+    axiosMock.onGet("/api/helprequest/all").reply(200, []);
+
+    render(
+      <QueryClientProvider client={makeClient()}>
+        <MemoryRouter>
+          <HelpRequestIndexPage />
+        </MemoryRouter>
+      </QueryClientProvider>
+    );
+
+    const btn = await screen.findByTestId("HelpRequestIndexPage-create-button");
+    expect(btn).toBeInTheDocument();
+    expect(btn).toHaveStyle({ float: "right" });
+  });
+
   test("shows loading state while fetching", async () => {
     setupCommon();
     axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
@@ -213,5 +265,59 @@ describe("HelpRequestIndexPage tests", () => {
     expect(screen.getByText("Loading...")).toBeInTheDocument();
 
     useBackendSpy.mockRestore();
+  });
+});
+
+// New tests to enforce header text, edit link, and testid presence
+import { render as render2, screen as screen2 } from "@testing-library/react";
+import { MemoryRouter as MemoryRouter2 } from "react-router-dom";
+import HelpRequestTable from "main/components/HelpRequest/HelpRequestTable";
+import { helpRequestFixtures } from "fixtures/helpRequestFixtures";
+
+describe("HelpRequestTable Stryker-killing tests", () => {
+  test("shows 'Actions' header when showButtons is true", () => {
+    render2(
+      <MemoryRouter2>
+        <HelpRequestTable
+          helpRequests={helpRequestFixtures.threeHelpRequests}
+          showButtons={true}
+        />
+      </MemoryRouter2>
+    );
+    // If the header string literal is mutated to "", this will fail
+    expect(screen2.getByRole("columnheader", { name: "Actions" })).toBeInTheDocument();
+  });
+
+  test("edit button has correct href /helprequest/edit/:id for first row", () => {
+    render2(
+      <MemoryRouter2>
+        <HelpRequestTable
+          helpRequests={helpRequestFixtures.threeHelpRequests}
+          showButtons={true}
+        />
+      </MemoryRouter2>
+    );
+    const editBtn = screen2.getByTestId(
+      "HelpRequestTable-cell-row-0-col-Buttons-button-edit"
+    );
+    const link = editBtn.closest("a");
+    expect(link).toBeTruthy();
+    // If `to={``}` mutation happens, this will fail
+    expect(link?.getAttribute("href")).toBe("/helprequest/edit/1");
+  });
+
+  test("edit button testid exists exactly as specified", () => {
+    render2(
+      <MemoryRouter2>
+        <HelpRequestTable
+          helpRequests={helpRequestFixtures.threeHelpRequests}
+          showButtons={true}
+        />
+      </MemoryRouter2>
+    );
+    // If data-testid is mutated to empty string, this will fail
+    expect(
+      screen2.getByTestId("HelpRequestTable-cell-row-0-col-Buttons-button-edit")
+    ).toBeInTheDocument();
   });
 });
