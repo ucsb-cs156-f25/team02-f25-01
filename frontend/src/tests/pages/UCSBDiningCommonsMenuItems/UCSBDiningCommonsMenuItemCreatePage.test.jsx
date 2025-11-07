@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import MenuItemReviewsCreatePage from "main/pages/MenuItemReviews/MenuItemReviewsCreatePage";
+import UCSBDiningCommonsMenuItemCreatePage from "main/pages/UCSBDiningCommonsMenuItems/UCSBDiningCommonsMenuItemCreatePage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router";
 
@@ -30,7 +30,7 @@ vi.mock("react-router", async (importOriginal) => {
   };
 });
 
-describe("MenuItemReviewsCreatePage tests", () => {
+describe("UCSBDiningCommonsMenuItemCreatePage tests", () => {
   const axiosMock = new AxiosMockAdapter(axios);
 
   beforeEach(() => {
@@ -50,80 +50,74 @@ describe("MenuItemReviewsCreatePage tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <MenuItemReviewsCreatePage />
+          <UCSBDiningCommonsMenuItemCreatePage />
         </MemoryRouter>
       </QueryClientProvider>,
     );
 
     await waitFor(() => {
-      expect(screen.getByLabelText("Stars")).toBeInTheDocument();
+      expect(screen.getByLabelText("Name")).toBeInTheDocument();
     });
   });
 
-  test("on submit, makes request to backend, and redirects to /menuitemreview", async () => {
+  test("on submit, makes request to backend, and redirects to /restaurants", async () => {
     const queryClient = new QueryClient();
-    const menuItemReview = {
-      id: 8,
-      itemId: "200",
-      reviewerEmail: "testuser@ucsb.edu",
-      stars:"1",
-      dateReviewed: "2025-12-14T09:05:40.000",
-      comments: "bad",
+    const ucsbDiningCommonsMenuItem = {
+      id: 1,
+      diningCommonsCode: "ortega",
+      name: "Creamy Pesto Pasta with Chicken",
+      station: "Entrees",
     };
 
-    axiosMock.onPost("/api/menuitemreview/post").reply(202, menuItemReview);
+    axiosMock
+      .onPost("/api/ucsbdiningcommonsmenuitems/post")
+      .reply(202, ucsbDiningCommonsMenuItem);
 
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <MenuItemReviewsCreatePage />
+          <UCSBDiningCommonsMenuItemCreatePage />
         </MemoryRouter>
       </QueryClientProvider>,
     );
 
     await waitFor(() => {
-      expect(screen.getByLabelText("Stars")).toBeInTheDocument();
+      expect(screen.getByLabelText("DiningCommonsCode")).toBeInTheDocument();
     });
 
-    const itemIdInput = screen.getByLabelText("Item Id");
-    expect(itemIdInput).toBeInTheDocument();
+    const diningCommonsCodeInput = screen.getByLabelText("DiningCommonsCode");
+    expect(diningCommonsCodeInput).toBeInTheDocument();
 
-    const reviewerEmailInput = screen.getByLabelText("Reviewer Email");
-    expect(reviewerEmailInput).toBeInTheDocument();
+    const nameInput = screen.getByLabelText("Name");
+    expect(nameInput).toBeInTheDocument();
 
-    const starsInput = screen.getByLabelText("Stars");
-    expect(starsInput).toBeInTheDocument();
-
-    const dateReviewedInput = screen.getByLabelText("Date Reviewed (iso format)");
-    expect(dateReviewedInput).toBeInTheDocument();
-
-    const commentsInput = screen.getByLabelText("Comments");
-    expect(commentsInput).toBeInTheDocument();
+    const stationInput = screen.getByLabelText("Station");
+    expect(stationInput).toBeInTheDocument();
 
     const createButton = screen.getByText("Create");
     expect(createButton).toBeInTheDocument();
 
-    fireEvent.change(itemIdInput, { target: { value: "200" } });
-    fireEvent.change(reviewerEmailInput, { target: { value: "testuser@ucsb.edu" } });
-    fireEvent.change(starsInput, { target: { value: "1" } });
-    fireEvent.change(dateReviewedInput, { target: { value: "2025-12-14T09:05:40.000" } });
-    fireEvent.change(commentsInput, { target: { value: "bad" } });
+    fireEvent.change(diningCommonsCodeInput, { target: { value: "ortega" } });
+    fireEvent.change(nameInput, {
+      target: { value: "Creamy Pesto Pasta with Chicken" },
+    });
+    fireEvent.change(stationInput, { target: { value: "Entrees" } });
     fireEvent.click(createButton);
 
     await waitFor(() => expect(axiosMock.history.post.length).toBe(1));
 
     expect(axiosMock.history.post[0].params).toEqual({
-      itemId: "200",
-      reviewerEmail: "testuser@ucsb.edu",
-      stars: "1",
-      dateReviewed: "2025-12-14T09:05:40.000",
-      comments: "bad",
+      diningCommonsCode: "ortega",
+      name: "Creamy Pesto Pasta with Chicken",
+      station: "Entrees",
     });
 
     // assert - check that the toast was called with the expected message
     expect(mockToast).toHaveBeenCalledWith(
-      "New menu item review Created - id: 8 itemId: 200",
+      "New menu item Created - id: 1 name: Creamy Pesto Pasta with Chicken",
     );
-    expect(mockNavigate).toHaveBeenCalledWith({ to: "/menuitemreviews" });
+    expect(mockNavigate).toHaveBeenCalledWith({
+      to: "/ucsbdiningcommonsmenuitems",
+    });
   });
 });
