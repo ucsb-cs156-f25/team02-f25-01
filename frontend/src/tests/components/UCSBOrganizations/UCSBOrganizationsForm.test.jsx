@@ -1,8 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router";
 
-import RecommendationRequestForm from "main/components/RecommendationRequests/RecommendationRequestForm";
-import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
+import UCSBOrganizationsForm from "main/components/UCSBOrganizations/UCSBOrganizationsForm";
+import { ucsbOrganizationsFixtures } from "fixtures/ucsbOrganizationsFixtures";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -15,29 +15,27 @@ vi.mock("react-router", async () => {
   };
 });
 
-describe("RecommendationRequestForm tests", () => {
+describe("UCSBOrganizationsForm tests", () => {
   const queryClient = new QueryClient();
 
-  const expectedHeaders = [
-    "Requester Email",
-    "Professor Email",
-    "Explanation",
-    "Date Requested (iso format)",
-    "Date Needed (iso format)",
-    "Done (True/False)",
-  ];
-  const testId = "RecommendationRequestForm";
+  const expectedHeaders = ["OrgTranslationShort", "OrgTranslation", "Inactive"];
+  const testId = "UCSBOrganizationsForm";
 
   test("renders correctly with no initialContents", async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
-          <RecommendationRequestForm />
+          <UCSBOrganizationsForm />
         </Router>
       </QueryClientProvider>,
     );
 
     expect(await screen.findByText(/Create/)).toBeInTheDocument();
+    expect(screen.getByText(/OrgCode/)).toBeInTheDocument();
+    expect(screen.getByTestId(`${testId}-orgCode`)).toBeInTheDocument();
+    expect(await screen.findByTestId(`${testId}-orgTranslation`)).toBeInTheDocument();
+    expect(screen.getByTestId(`${testId}-inactive`)).toBeInTheDocument();
+    expect(screen.getByTestId(`${testId}-submit`)).toBeInTheDocument();
 
     expectedHeaders.forEach((headerText) => {
       const header = screen.getByText(headerText);
@@ -49,10 +47,8 @@ describe("RecommendationRequestForm tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
-          <RecommendationRequestForm
-            initialContents={
-              recommendationRequestFixtures.oneRecommendationRequest
-            }
+          <UCSBOrganizationsForm
+            initialContents={ucsbOrganizationsFixtures.oneOrganization}
           />
         </Router>
       </QueryClientProvider>,
@@ -65,15 +61,15 @@ describe("RecommendationRequestForm tests", () => {
       expect(header).toBeInTheDocument();
     });
 
-    expect(await screen.findByTestId(`${testId}-id`)).toBeInTheDocument();
-    expect(screen.getByText(`Id`)).toBeInTheDocument();
+    expect(await screen.findByTestId(`${testId}-orgCode`)).toBeInTheDocument();
+    expect(screen.getByText(`OrgCode`)).toBeInTheDocument();
   });
 
   test("that navigate(-1) is called when Cancel is clicked", async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
-          <RecommendationRequestForm />
+          <UCSBOrganizationsForm />
         </Router>
       </QueryClientProvider>,
     );
@@ -89,7 +85,7 @@ describe("RecommendationRequestForm tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
-          <RecommendationRequestForm />
+          <UCSBOrganizationsForm />
         </Router>
       </QueryClientProvider>,
     );
@@ -98,19 +94,17 @@ describe("RecommendationRequestForm tests", () => {
     const submitButton = screen.getByText(/Create/);
     fireEvent.click(submitButton);
 
-    await screen.findByText(/Requester Email is required/);
-    expect(screen.getByText(/Professor Email is required/)).toBeInTheDocument();
-    expect(screen.getByText(/Explanation is required/)).toBeInTheDocument();
-    expect(screen.getByText(/Date Requested is required/)).toBeInTheDocument();
-    expect(screen.getByText(/Date Needed is required/)).toBeInTheDocument();
-    expect(screen.getByText(/Done is required/)).toBeInTheDocument();
+    expect(await screen.findByText(/OrgCode is required/)).toBeInTheDocument();
+    expect(await screen.findByText(/OrgTranslationShort is required/)).toBeInTheDocument();
+    expect(await screen.findByText(/OrgTranslation is required/)).toBeInTheDocument();
+    expect(await screen.findByText(/Inactive is required/)).toBeInTheDocument();
 
-    const nameInput = screen.getByTestId(`${testId}-requesterEmail`);
-    fireEvent.change(nameInput, { target: { value: "a".repeat(256) } });
+    const nameInput = screen.getByTestId(`${testId}-orgTranslationShort`);
+    fireEvent.change(nameInput, { target: { value: "a".repeat(31) } });
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/Max length 255 characters/)).toBeInTheDocument();
+      expect(screen.getByText(/Max length 30 characters/)).toBeInTheDocument();
     });
   });
 });

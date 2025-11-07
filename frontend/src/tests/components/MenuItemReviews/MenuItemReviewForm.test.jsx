@@ -1,8 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router";
 
-import RecommendationRequestForm from "main/components/RecommendationRequests/RecommendationRequestForm";
-import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
+import MenuItemReviewForm from "main/components/MenuItemReviews/MenuItemReviewForm";
+import { menuItemReviewFixtures } from "fixtures/menuItemReviewFixtures";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -15,24 +15,23 @@ vi.mock("react-router", async () => {
   };
 });
 
-describe("RecommendationRequestForm tests", () => {
+describe("MenuItemReviewForm tests", () => {
   const queryClient = new QueryClient();
 
   const expectedHeaders = [
-    "Requester Email",
-    "Professor Email",
-    "Explanation",
-    "Date Requested (iso format)",
-    "Date Needed (iso format)",
-    "Done (True/False)",
+    "Item Id",
+    "Reviewer Email",
+    "Stars",
+    "Date Reviewed (iso format)",
+    "Comments",
   ];
-  const testId = "RecommendationRequestForm";
+  const testId = "MenuItemReviewForm";
 
   test("renders correctly with no initialContents", async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
-          <RecommendationRequestForm />
+          <MenuItemReviewForm />
         </Router>
       </QueryClientProvider>,
     );
@@ -49,10 +48,8 @@ describe("RecommendationRequestForm tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
-          <RecommendationRequestForm
-            initialContents={
-              recommendationRequestFixtures.oneRecommendationRequest
-            }
+          <MenuItemReviewForm
+            initialContents={menuItemReviewFixtures.oneMenuItemReview}
           />
         </Router>
       </QueryClientProvider>,
@@ -73,7 +70,7 @@ describe("RecommendationRequestForm tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
-          <RecommendationRequestForm />
+          <MenuItemReviewForm />
         </Router>
       </QueryClientProvider>,
     );
@@ -89,7 +86,7 @@ describe("RecommendationRequestForm tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
-          <RecommendationRequestForm />
+          <MenuItemReviewForm />
         </Router>
       </QueryClientProvider>,
     );
@@ -98,19 +95,10 @@ describe("RecommendationRequestForm tests", () => {
     const submitButton = screen.getByText(/Create/);
     fireEvent.click(submitButton);
 
-    await screen.findByText(/Requester Email is required/);
-    expect(screen.getByText(/Professor Email is required/)).toBeInTheDocument();
-    expect(screen.getByText(/Explanation is required/)).toBeInTheDocument();
-    expect(screen.getByText(/Date Requested is required/)).toBeInTheDocument();
-    expect(screen.getByText(/Date Needed is required/)).toBeInTheDocument();
-    expect(screen.getByText(/Done is required/)).toBeInTheDocument();
-
-    const nameInput = screen.getByTestId(`${testId}-requesterEmail`);
-    fireEvent.change(nameInput, { target: { value: "a".repeat(256) } });
-    fireEvent.click(submitButton);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Max length 255 characters/)).toBeInTheDocument();
-    });
+    await screen.findByText(/Item Id is required/);
+    expect(screen.getByText(/Reviewer Email is required/)).toBeInTheDocument();
+    expect(screen.getByText(/Stars is required/)).toBeInTheDocument();
+    expect(screen.getByText(/Date Reviewed is required/)).toBeInTheDocument();
+    expect(screen.getByText(/Comments is required/)).toBeInTheDocument();
   });
 });
