@@ -1,45 +1,41 @@
 import React from "react";
-import ArticleTable from "main/components/Articles/ArticleTable";
-import { articlesFixtures } from "fixtures/articlesFixtures";
+import MenuItemReviewsTable from "main/components/MenuItemReviews/MenuItemReviewsTable";
+import { menuItemReviewFixtures } from "fixtures/menuItemReviewFixtures";
 import { currentUserFixtures } from "fixtures/currentUserFixtures";
 import { http, HttpResponse } from "msw";
 
 export default {
-  title: "components/Articles/ArticleTable",
-  component: ArticleTable,
+  title: "components/MenuItemReviews/MenuItemReviewsTable",
+  component: MenuItemReviewsTable,
 };
 
 const Template = (args) => {
-  return <ArticleTable {...args} />;
+  return <MenuItemReviewsTable {...args} />;
 };
 
 export const Empty = Template.bind({});
 
 Empty.args = {
-  articles: [],
-  currentUser: currentUserFixtures.userOnly,
+  menuItemReviews: [],
 };
 
 export const ThreeItemsOrdinaryUser = Template.bind({});
 
 ThreeItemsOrdinaryUser.args = {
-  articles: articlesFixtures.threeArticles,
+  menuItemReviews: menuItemReviewFixtures.threeMenuItemReviews,
   currentUser: currentUserFixtures.userOnly,
 };
 
 export const ThreeItemsAdminUser = Template.bind({});
 ThreeItemsAdminUser.args = {
-  articles: articlesFixtures.threeArticles,
+  menuItemReviews: menuItemReviewFixtures.threeMenuItemReviews,
   currentUser: currentUserFixtures.adminUser,
 };
 
 ThreeItemsAdminUser.parameters = {
   msw: [
-    http.delete("/api/articles", () => {
-      return HttpResponse.json(
-        { message: "Article deleted successfully" },
-        { status: 200 },
-      );
+    http.delete("/api/menuitemreviews", () => {
+      return HttpResponse.json({}, { status: 200 });
     }),
   ],
 };

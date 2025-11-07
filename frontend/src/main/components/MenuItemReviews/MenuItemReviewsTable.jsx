@@ -5,15 +5,19 @@ import { useBackendMutation } from "main/utils/useBackend";
 import {
   cellToAxiosParamsDelete,
   onDeleteSuccess,
-} from "main/utils/articleUtils";
+} from "main/utils/menuItemReviewUtils";
 import { useNavigate } from "react-router";
 import { hasRole } from "main/utils/useCurrentUser";
 
-export default function ArticleTable({ articles, currentUser }) {
+export default function MenuItemReviewTable({
+  menuItemReviews,
+  currentUser,
+  testIdPrefix = "MenuItemReviewTable",
+}) {
   const navigate = useNavigate();
 
   const editCallback = (cell) => {
-    navigate(`/articles/edit/${cell.row.original.id}`);
+    navigate(`/menuitemreviews/edit/${cell.row.original.id}`);
   };
 
   // Stryker disable all : hard to test for query caching
@@ -21,7 +25,7 @@ export default function ArticleTable({ articles, currentUser }) {
   const deleteMutation = useBackendMutation(
     cellToAxiosParamsDelete,
     { onSuccess: onDeleteSuccess },
-    ["/api/articles/all"],
+    ["/api/menuitemreviews/all"],
   );
   // Stryker restore all
 
@@ -35,34 +39,37 @@ export default function ArticleTable({ articles, currentUser }) {
       header: "id",
       accessorKey: "id", // accessor is the "key" in the data
     },
+
     {
-      header: "Title",
-      accessorKey: "title",
+      header: "Item Id",
+      accessorKey: "itemId",
     },
     {
-      header: "URL",
-      accessorKey: "url",
+      header: "Reviewer Email",
+      accessorKey: "reviewerEmail",
     },
     {
-      header: "Explanation",
-      accessorKey: "explanation",
+        header: "Stars",
+        accessorKey: "stars",
     },
     {
-      header: "Email",
-      accessorKey: "email",
+        header: "Date Reviewed",
+        accessorKey: "dateReviewed",
     },
     {
-      header: "Date Added",
-      accessorKey: "dateAdded",
+        header: "Comments",
+        accessorKey: "comments",
     },
   ];
 
   if (hasRole(currentUser, "ROLE_ADMIN")) {
-    columns.push(ButtonColumn("Edit", "primary", editCallback, "ArticleTable"));
+    columns.push(ButtonColumn("Edit", "primary", editCallback, testIdPrefix));
     columns.push(
-      ButtonColumn("Delete", "danger", deleteCallback, "ArticleTable"),
+      ButtonColumn("Delete", "danger", deleteCallback, testIdPrefix),
     );
   }
 
-  return <OurTable data={articles} columns={columns} testid={"ArticleTable"} />;
+  return (
+    <OurTable data={menuItemReviews} columns={columns} testid={testIdPrefix} />
+  );
 }
