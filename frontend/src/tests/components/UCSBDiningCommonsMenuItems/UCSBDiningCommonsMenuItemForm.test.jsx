@@ -111,12 +111,12 @@ describe("UCSBDiningCommonsMenuItemForm tests", () => {
     });
 
     const nameInput = screen.getByTestId(`${testId}-name`);
-    fireEvent.change(nameInput, { target: { value: "a".repeat(31) } });
+    fireEvent.change(nameInput, { target: { value: "a".repeat(51) } });
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/Max length 30 characters/)).toBeInTheDocument();
-      const codeError = screen.getByText("Max length 30 characters");
+      expect(screen.getByText(/Max length 50 characters/)).toBeInTheDocument();
+      const codeError = screen.getByText("Max length 50 characters");
       const codeInput = screen.getByTestId(`${testId}-name`);
       expect(codeInput.closest("form")).toContainElement(codeError);
     });
@@ -132,27 +132,27 @@ describe("UCSBDiningCommonsMenuItemForm tests", () => {
       expect(codeInput.closest("form")).toContainElement(codeError);
     });
   });
-  
+
   test("shows exact 'Max length 15 characters' message for station field", async () => {
-  render(
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <UCSBDiningCommonsMenuItemForm />
-      </Router>
-    </QueryClientProvider>,
-  );
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <UCSBDiningCommonsMenuItemForm />
+        </Router>
+      </QueryClientProvider>,
+    );
 
-  const stationInput = await screen.findByTestId(`${testId}-station`);
-  const submitButton = await screen.findByTestId(`${testId}-submit`);
+    const stationInput = await screen.findByTestId(`${testId}-station`);
+    const submitButton = await screen.findByTestId(`${testId}-submit`);
 
-  // Enter a 16-char value to trigger validation
-  fireEvent.change(stationInput, { target: { value: "a".repeat(16) } });
-  fireEvent.click(submitButton);
+    // Enter a 16-char value to trigger validation
+    fireEvent.change(stationInput, { target: { value: "a".repeat(16) } });
+    fireEvent.click(submitButton);
 
-  await waitFor(() => {
-    const error = screen.getByText("Max length 15 characters");
-    expect(error).toBeInTheDocument();
-    expect(stationInput.closest("form")).toContainElement(error);
+    await waitFor(() => {
+      const error = screen.getByText("Max length 15 characters");
+      expect(error).toBeInTheDocument();
+      expect(stationInput.closest("form")).toContainElement(error);
+    });
   });
-});
 });
