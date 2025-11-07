@@ -11,9 +11,9 @@ import RestaurantIndexPage from "main/pages/Restaurants/RestaurantIndexPage";
 import RestaurantCreatePage from "main/pages/Restaurants/RestaurantCreatePage";
 import RestaurantEditPage from "main/pages/Restaurants/RestaurantEditPage";
 
-import HelpRequestIndexPage from "main/pages/HelpRequest/HelpRequestIndexPage";
-import HelpRequestCreatePage from "main/pages/HelpRequest/HelpRequestCreatePage";
-import HelpRequestEditPage from "main/pages/HelpRequest/HelpRequestEditPage";
+import HelpRequestIndexPage from "main/pages/HelpRequests/HelpRequestsIndexPage";
+import HelpRequestCreatePage from "main/pages/HelpRequests/HelpRequestsCreatePage";
+import HelpRequestEditPage from "main/pages/HelpRequests/HelpRequestsEditPage";
 
 import MenuItemReviewsIndexPage from "main/pages/MenuItemReviews/MenuItemReviewsIndexPage";
 import MenuItemReviewsCreatePage from "main/pages/MenuItemReviews/MenuItemReviewsCreatePage";
@@ -76,11 +76,21 @@ function App() {
       {hasRole(currentUser, "ROLE_USER") && (
         <>
           <Route exact path="/helprequest" element={<HelpRequestIndexPage />} />
+          <Route exact path="/menuitemreviews" element={<MenuItemReviewsIndexPage />} />
         </>
       )}
-      {hasRole(currentUser, "ROLE_USER") && (
+      {hasRole(currentUser, "ROLE_ADMIN") && (
         <>
-          <Route exact path="/restaurants" element={<RestaurantIndexPage />} />
+          <Route
+            exact
+            path="/helprequest/edit/:id"
+            element={<HelpRequestEditPage />}
+          />
+          <Route
+            exact
+            path="/helprequest/create"
+            element={<HelpRequestCreatePage />}
+          />
         </>
       )}
       {hasRole(currentUser, "ROLE_ADMIN") && (

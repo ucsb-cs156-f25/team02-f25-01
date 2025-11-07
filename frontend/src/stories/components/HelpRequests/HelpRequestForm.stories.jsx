@@ -1,9 +1,9 @@
 import React from "react";
-import HelpRequestForm from "main/components/HelpRequest/HelpRequestForm";
+import HelpRequestForm from "main/components/HelpRequests/HelpRequestForm";
 import { helpRequestFixtures } from "fixtures/helpRequestFixtures";
 
 export default {
-  title: "components/HelpRequest/HelpRequestForm",
+  title: "components/HelpRequests/HelpRequestForm",
   component: HelpRequestForm,
 };
 
@@ -12,6 +12,7 @@ const Template = (args) => {
 };
 
 export const Create = Template.bind({});
+
 Create.args = {
   buttonLabel: "Create",
   submitAction: (data) => {
@@ -21,6 +22,7 @@ Create.args = {
 };
 
 export const Update = Template.bind({});
+
 Update.args = {
   initialContents: helpRequestFixtures.oneHelpRequest,
   buttonLabel: "Update",
