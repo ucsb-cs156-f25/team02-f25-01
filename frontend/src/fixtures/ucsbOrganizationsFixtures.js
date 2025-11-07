@@ -1,5 +1,3 @@
-import { True } from "@uiw/react-json-view/cjs/types/True";
-
 const ucsbOrganizationsFixtures = {
   oneOrganization: [
     {
