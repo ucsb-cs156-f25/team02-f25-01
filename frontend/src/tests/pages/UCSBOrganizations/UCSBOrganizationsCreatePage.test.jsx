@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import MenuItemReviewsCreatePage from "main/pages/MenuItemReviews/MenuItemReviewsCreatePage";
+import UCSBOrganizationsCreatePage from "main/pages/UCSBOrganizations/UCSBOrganizationsCreatePage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router";
 
@@ -30,7 +30,7 @@ vi.mock("react-router", async (importOriginal) => {
   };
 });
 
-describe("MenuItemReviewsCreatePage tests", () => {
+describe("UCSBOrganizationsCreatePage tests", () => {
   const axiosMock = new AxiosMockAdapter(axios);
 
   beforeEach(() => {
@@ -50,80 +50,79 @@ describe("MenuItemReviewsCreatePage tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <MenuItemReviewsCreatePage />
+          <UCSBOrganizationsCreatePage />
         </MemoryRouter>
       </QueryClientProvider>,
     );
 
     await waitFor(() => {
-      expect(screen.getByLabelText("Stars")).toBeInTheDocument();
+      expect(screen.getByLabelText("OrgCode")).toBeInTheDocument();
     });
   });
 
-  test("on submit, makes request to backend, and redirects to /menuitemreview", async () => {
+  test("on submit, makes request to backend, and redirects to /ucsborganizations", async () => {
     const queryClient = new QueryClient();
-    const menuItemReview = {
-      id: 8,
-      itemId: "200",
-      reviewerEmail: "testuser@ucsb.edu",
-      stars:"1",
-      dateReviewed: "2025-12-14T09:05:40.000",
-      comments: "bad",
+    const ucsbOrganization = {
+      orgCode: "SCD",
+      orgTranslationShort: "South Coast Deli",
+      orgTranslation: "South Coast Deli",
+      inactive: false,
     };
 
-    axiosMock.onPost("/api/menuitemreview/post").reply(202, menuItemReview);
+    axiosMock.onPost("/api/ucsborganizations/post").reply(202, ucsbOrganization);
 
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <MenuItemReviewsCreatePage />
+          <UCSBOrganizationsCreatePage />
         </MemoryRouter>
       </QueryClientProvider>,
     );
 
     await waitFor(() => {
-      expect(screen.getByLabelText("Stars")).toBeInTheDocument();
+      expect(screen.getByLabelText("OrgCode")).toBeInTheDocument();
     });
 
-    const itemIdInput = screen.getByLabelText("Item Id");
-    expect(itemIdInput).toBeInTheDocument();
+    const orgCodeInput = screen.getByLabelText("OrgCode");
+    expect(orgCodeInput).toBeInTheDocument();
 
-    const reviewerEmailInput = screen.getByLabelText("Reviewer Email");
-    expect(reviewerEmailInput).toBeInTheDocument();
+    const orgTranslationShortInput = screen.getByLabelText("OrgTranslationShort");
+    expect(orgTranslationShortInput).toBeInTheDocument();
 
-    const starsInput = screen.getByLabelText("Stars");
-    expect(starsInput).toBeInTheDocument();
+    const orgTranslationInput = screen.getByLabelText("OrgTranslation");
+    expect(orgTranslationInput).toBeInTheDocument();
 
-    const dateReviewedInput = screen.getByLabelText("Date Reviewed (iso format)");
-    expect(dateReviewedInput).toBeInTheDocument();
-
-    const commentsInput = screen.getByLabelText("Comments");
-    expect(commentsInput).toBeInTheDocument();
+    const inactiveInput = screen.getByLabelText("Inactive");
+    expect(inactiveInput).toBeInTheDocument();
 
     const createButton = screen.getByText("Create");
     expect(createButton).toBeInTheDocument();
 
-    fireEvent.change(itemIdInput, { target: { value: "200" } });
-    fireEvent.change(reviewerEmailInput, { target: { value: "testuser@ucsb.edu" } });
-    fireEvent.change(starsInput, { target: { value: "1" } });
-    fireEvent.change(dateReviewedInput, { target: { value: "2025-12-14T09:05:40.000" } });
-    fireEvent.change(commentsInput, { target: { value: "bad" } });
+    fireEvent.change(orgCodeInput, { target: { value: "SCD" } });
+    fireEvent.change(orgTranslationShortInput, {
+      target: { value: "South Coast Deli" },
+    });
+    fireEvent.change(orgTranslationInput, {
+      target: { value: "South Coast Deli" },
+    });
+    fireEvent.change(inactiveInput, {
+      target: { value: false },
+    });   
     fireEvent.click(createButton);
 
     await waitFor(() => expect(axiosMock.history.post.length).toBe(1));
 
     expect(axiosMock.history.post[0].params).toEqual({
-      itemId: "200",
-      reviewerEmail: "testuser@ucsb.edu",
-      stars: "1",
-      dateReviewed: "2025-12-14T09:05:40.000",
-      comments: "bad",
+      orgCode: "SCD",
+      orgTranslationShort: "South Coast Deli",
+      orgTranslation: "South Coast Deli",
+      inactive: "false",
     });
 
     // assert - check that the toast was called with the expected message
-    expect(mockToast).toHaveBeenCalledWith(
-      "New menu item review Created - id: 8 itemId: 200",
+    expect(mockToast).toBeCalledWith(
+      "New UCSB organization Created - orgCode: SCD orgTranslationShort: South Coast Deli orgTranslation: South Coast Deli inactive: false",
     );
-    expect(mockNavigate).toHaveBeenCalledWith({ to: "/menuitemreviews" });
+    expect(mockNavigate).toBeCalledWith({ to: "/ucsborganizations" });
   });
 });
