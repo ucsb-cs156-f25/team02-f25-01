@@ -10,9 +10,9 @@ import UCSBDatesEditPage from "main/pages/UCSBDates/UCSBDatesEditPage";
 import RestaurantIndexPage from "main/pages/Restaurants/RestaurantIndexPage";
 import RestaurantCreatePage from "main/pages/Restaurants/RestaurantCreatePage";
 import RestaurantEditPage from "main/pages/Restaurants/RestaurantEditPage";
-import HelpRequestIndexPage from "main/pages/HelpRequest/HelpRequestIndexPage";
-import HelpRequestCreatePage from "main/pages/HelpRequest/HelpRequestCreatePage";
-import HelpRequestEditPage from "main/pages/HelpRequest/HelpRequestEditPage";
+import HelpRequestIndexPage from "main/pages/HelpRequests/HelpRequestIndexPage";
+import HelpRequestCreatePage from "main/pages/HelpRequests/HelpRequestCreatePage";
+import HelpRequestEditPage from "main/pages/HelpRequests/HelpRequestEditPage";
 
 import MenuItemReviewsIndexPage from "main/pages/MenuItemReviews/MenuItemReviewsIndexPage";
 import MenuItemReviewsCreatePage from "main/pages/MenuItemReviews/MenuItemReviewsCreatePage";
