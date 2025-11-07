@@ -11,9 +11,9 @@ import RestaurantIndexPage from "main/pages/Restaurants/RestaurantIndexPage";
 import RestaurantCreatePage from "main/pages/Restaurants/RestaurantCreatePage";
 import RestaurantEditPage from "main/pages/Restaurants/RestaurantEditPage";
 
-import UCSBDiningCommonsMenuItemIndexPage from "main/pages/UCSBDiningCommonsMenuItems/UCSBDiningCommonsMenuItemIndexPage";
-import UCSBDiningCommonsMenuItemCreatePage from "main/pages/UCSBDiningCommonsMenuItems/UCSBDiningCommonsMenuItemCreatePage";
-import UCSBDiningCommonsMenuItemEditPage from "main/pages/UCSBDiningCommonsMenuItems/UCSBDiningCommonsMenuItemEditPage";
+import RecommendationRequestsIndexPage from "main/pages/RecommendationRequests/RecommendationRequestsIndexPage";
+import RecommendationRequestsCreatePage from "main/pages/RecommendationRequests/RecommendationRequestsCreatePage";
+import RecommendationRequestsEditPage from "main/pages/RecommendationRequests/RecommendationRequestsEditPage";
 
 import PlaceholderIndexPage from "main/pages/Placeholder/PlaceholderIndexPage";
 import PlaceholderCreatePage from "main/pages/Placeholder/PlaceholderCreatePage";
@@ -61,8 +61,8 @@ function App() {
         <>
           <Route
             exact
-            path="/ucsbdiningcommonsmenuitems"
-            element={<UCSBDiningCommonsMenuItemIndexPage />}
+            path="/recommendationrequests"
+            element={<RecommendationRequestsIndexPage />}
           />
         </>
       )}
@@ -70,13 +70,13 @@ function App() {
         <>
           <Route
             exact
-            path="/ucsbdiningcommonsmenuitems/edit/:id"
-            element={<UCSBDiningCommonsMenuItemEditPage />}
+            path="/recommendationrequests/edit/:id"
+            element={<RecommendationRequestsEditPage />}
           />
           <Route
             exact
-            path="/ucsbdiningcommonsmenuitems/create"
-            element={<UCSBDiningCommonsMenuItemCreatePage />}
+            path="/recommendationrequests/create"
+            element={<RecommendationRequestsCreatePage />}
           />
         </>
       )}
