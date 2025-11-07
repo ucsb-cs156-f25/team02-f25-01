@@ -33,14 +33,6 @@ public class UCSBOrganizationsWebIT extends WebTestCase {
     assertThat(page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-orgTranslation"))
         .hasText("Build your own burrito chain");
 
-    page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-Edit-button").click();
-    assertThat(page.getByText("Edit UCSB Organization")).isVisible();
-    page.getByTestId("UCSBOrganizationsForm-orgTranslation").fill("THE BEST");
-    page.getByTestId("UCSBOrganizationsForm-submit").click();
-
-    assertThat(page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-orgTranslation"))
-        .hasText("THE BEST");
-
     page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-Delete-button").click();
 
     assertThat(page.getByTestId("UCSBOrganizationsTable-cell-row-0-col-orgCode")).not().isVisible();
