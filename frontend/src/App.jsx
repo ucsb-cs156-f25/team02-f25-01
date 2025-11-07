@@ -19,10 +19,6 @@ import MenuItemReviewsIndexPage from "main/pages/MenuItemReviews/MenuItemReviews
 import MenuItemReviewsCreatePage from "main/pages/MenuItemReviews/MenuItemReviewsCreatePage";
 import MenuItemReviewsEditPage from "main/pages/MenuItemReviews/MenuItemReviewsEditPage";
 
-import RecommendationRequestsIndexPage from "main/pages/RecommendationRequests/RecommendationRequestsIndexPage";
-import RecommendationRequestsCreatePage from "main/pages/RecommendationRequests/RecommendationRequestsCreatePage";
-import RecommendationRequestsEditPage from "main/pages/RecommendationRequests/RecommendationRequestsEditPage";
-
 import UCSBDiningCommonsMenuItemIndexPage from "main/pages/UCSBDiningCommonsMenuItems/UCSBDiningCommonsMenuItemIndexPage";
 import UCSBDiningCommonsMenuItemEditPage from "main/pages/UCSBDiningCommonsMenuItems/UCSBDiningCommonsMenuItemEditPage";
 import UCSBDiningCommonsMenuItemCreatePage from "main/pages/UCSBDiningCommonsMenuItems/UCSBDiningCommonsMenuItemCreatePage";
@@ -79,30 +75,8 @@ function App() {
       )}
       {hasRole(currentUser, "ROLE_USER") && (
         <>
-          <Route
-            exact
-            path="/recommendationrequests"
-            element={<RecommendationRequestsIndexPage />}
-          />
-        </>
-      )}
-      {hasRole(currentUser, "ROLE_ADMIN") && (
-        <>
-          <Route
-            exact
-            path="/recommendationrequests/edit/:id"
-            element={<RecommendationRequestsEditPage />}
-          />
-          <Route
-            exact
-            path="/recommendationrequests/create"
-            element={<RecommendationRequestsCreatePage />}
-          />
-        </>
-      )}
-      {hasRole(currentUser, "ROLE_USER") && (
-        <>
           <Route exact path="/helprequests" element={<HelpRequestIndexPage />} />
+          <Route exact path="/menuitemreviews" element={<MenuItemReviewsIndexPage />} />
         </>
       )}
       {hasRole(currentUser, "ROLE_ADMIN") && (
