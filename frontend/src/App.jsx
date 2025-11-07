@@ -74,19 +74,14 @@ function App() {
         <>
           <Route
             exact
-            path="/menuitemreviews/edit/:id"
-            element={<MenuItemReviewsEditPage />}
+            path="/helprequest/edit/:id"
+            element={<HelpRequestEditPage />}
           />
           <Route
             exact
-            path="/menuitemreviews/create"
-            element={<MenuItemReviewsCreatePage />}
+            path="/helprequest/create"
+            element={<HelpRequestCreatePage />}
           />
-        </>
-      )}
-      {hasRole(currentUser, "ROLE_USER") && (
-        <>
-          <Route exact path="/restaurants" element={<RestaurantIndexPage />} />
         </>
       )}
       {hasRole(currentUser, "ROLE_ADMIN") && (
