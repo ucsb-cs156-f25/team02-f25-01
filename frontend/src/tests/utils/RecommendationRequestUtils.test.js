@@ -1,7 +1,7 @@
 import {
   onDeleteSuccess,
   cellToAxiosParamsDelete,
-} from "main/utils/UCSBOrganizationsUtils";
+} from "main/utils/recommendationRequestUtil";
 import mockConsole from "tests/testutils/mockConsole";
 
 const mockToast = vi.fn();
@@ -13,7 +13,7 @@ vi.mock("react-toastify", async (importOriginal) => {
   };
 });
 
-describe("UCSBOrganizationsUtils", () => {
+describe("RecommendationRequestUtils", () => {
   describe("onDeleteSuccess", () => {
     test("It puts the message on console.log and in a toast", () => {
       // arrange
@@ -34,16 +34,16 @@ describe("UCSBOrganizationsUtils", () => {
   describe("cellToAxiosParamsDelete", () => {
     test("It returns the correct params", () => {
       // arrange
-      const cell = { row: { original: { orgCode: "17" } } };
+      const cell = { row: { original: { id: 17 } } };
 
       // act
       const result = cellToAxiosParamsDelete(cell);
 
       // assert
       expect(result).toEqual({
-        url: "/api/ucsborganizations",
+        url: "/api/recommendationrequests",
         method: "DELETE",
-        params: { orgCode: "17" },
+        params: { id: 17 },
       });
     });
   });
