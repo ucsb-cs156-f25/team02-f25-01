@@ -48,7 +48,7 @@ public class UCSBDiningCommonsMenuItemWebIT extends WebTestCase {
   }
 
   @Test
-  public void regular_user_cannot_create_restaurant() throws Exception {
+  public void regular_user_cannot_create_menu_item() throws Exception {
     setupUser(false);
 
     page.getByText("Menu Items").click();
