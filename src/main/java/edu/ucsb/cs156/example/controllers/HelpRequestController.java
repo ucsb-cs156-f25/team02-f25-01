@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 /** REST controller for HelpRequest (index + create) */
 @Tag(name = "HelpRequest")
 @RestController
-@RequestMapping("/api/helprequest")
+@RequestMapping({"/api/helprequests"})
 @Slf4j
 public class HelpRequestController extends ApiController {
 
